@@ -91,6 +91,10 @@ export default function Header() {
               Services
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange transition-all duration-300 group-hover:w-full"></span>
             </Link>
+            <Link href="/service-estimator" className="relative font-medium hover:text-orange transition-colors group py-1">
+              Service Estimator
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange transition-all duration-300 group-hover:w-full"></span>
+            </Link>
             <Link href="/shop" className="relative font-medium hover:text-orange transition-colors group py-1">
               Shop
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange transition-all duration-300 group-hover:w-full"></span>
@@ -169,6 +173,13 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 Services
+              </Link>
+              <Link 
+                href="/service-estimator" 
+                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-orange hover:border-orange transition-colors"
+                onClick={closeMobileMenu}
+              >
+                Service Estimator
               </Link>
               <Link 
                 href="/shop" 

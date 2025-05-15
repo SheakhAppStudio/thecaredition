@@ -16,6 +16,10 @@ export default function Home() {
     }
   }, []);
 
+  // Reference for the services slider
+  const servicesSliderRef = useRef<HTMLDivElement>(null);
+  const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
+  
   useEffect(() => {
     // Create continuous scrolling effect from left to right
     const animationInterval = setInterval(() => {
@@ -43,6 +47,24 @@ export default function Home() {
     
     return () => clearInterval(animationInterval);
   }, [scrollPosition]);
+  
+  // Auto-scrolling effect for services slider
+  useEffect(() => {
+    if (!autoScrollEnabled) return;
+    
+    const servicesInterval = setInterval(() => {
+      if (servicesSliderRef.current) {
+        servicesSliderRef.current.scrollLeft += 1;
+        
+        // Reset when we reach the end
+        if (servicesSliderRef.current.scrollLeft >= servicesSliderRef.current.scrollWidth - servicesSliderRef.current.clientWidth - 10) {
+          servicesSliderRef.current.scrollLeft = 0;
+        }
+      }
+    }, 30);
+    
+    return () => clearInterval(servicesInterval);
+  }, [autoScrollEnabled]);
   return (
     <main className="bg-black text-white">
       {/* Hero Section */}
@@ -564,48 +586,262 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Car Showcase Section */}
+      {/* Specialist Mechanical Work and Diagnostics */}
       <section className="py-16 bg-gray-950">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl text-center mb-12">Car Showcase</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-900 p-6 rounded-lg">
-              <div className="h-60 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
-                <Image
-                  src="/images/logos/background image one..jpg"
-                  alt="Car Showcase"
-                  width={400}
-                  height={300}
-                  className="object-cover"
-                />
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-white uppercase">Specialist Mechanical Work and Diagnostics</h2>
+            <div className="w-24 h-1 bg-orange mx-auto mt-4 mb-8"></div>
+          </div>
+          
+          {/* Sliding services carousel */}
+          <div className="relative overflow-hidden" 
+            onMouseEnter={() => setAutoScrollEnabled(false)}
+            onMouseLeave={() => setAutoScrollEnabled(true)}
+          >
+            {/* Slider container */}
+            <div className="flex space-x-6 overflow-x-auto pb-8 scrollbar-hide scroll-smooth snap-x snap-mandatory" ref={servicesSliderRef}>
+              
+              {/* Service 1: Timing Chains */}
+              <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative h-80 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/services/serviceimage1.jpg"
+                    alt="Timing Chains"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">TIMING CHAINS</h3>
+                    <p className="text-sm mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/service-estimator" className="text-xs font-bold tracking-wider uppercase flex items-center text-white hover:text-orange transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-white text-center">Luxury Car</h3>
+              
+              {/* Service 2: Engine Rebuilds */}
+              <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative h-80 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/services/serviceimage2.jpg"
+                    alt="Engine Rebuilds"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">ENGINE REBUILDS</h3>
+                    <p className="text-sm mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/service-estimator" className="text-xs font-bold tracking-wider uppercase flex items-center text-white hover:text-orange transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Service 3: Turbos */}
+              <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative h-80 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/services/serviceimage3.jpg"
+                    alt="Turbos"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">TURBOS</h3>
+                    <p className="text-sm mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/service-estimator" className="text-xs font-bold tracking-wider uppercase flex items-center text-white hover:text-orange transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Service 4: Transmission */}
+              <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative h-80 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/services/serviceimage4.jpg"
+                    alt="Transmission"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">TRANSMISSION</h3>
+                    <p className="text-sm mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/service-estimator" className="text-xs font-bold tracking-wider uppercase flex items-center text-white hover:text-orange transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Service 5: Diagnostics */}
+              <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative h-80 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/services/serviceimage5.jpg"
+                    alt="Diagnostics"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">DIAGNOSTICS</h3>
+                    <p className="text-sm mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/service-estimator" className="text-xs font-bold tracking-wider uppercase flex items-center text-white hover:text-orange transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Duplicate cards for infinite scroll effect */}
+              {/* Service 1: Timing Chains (duplicate) */}
+              <div className="flex-shrink-0 w-full md:w-1/3 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative h-80 overflow-hidden rounded-lg">
+                  <Image
+                    src="/images/services/serviceimage1.jpg"
+                    alt="Timing Chains"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-xl font-bold mb-2">TIMING CHAINS</h3>
+                    <p className="text-sm mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/service-estimator" className="text-xs font-bold tracking-wider uppercase flex items-center text-white hover:text-orange transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-gray-900 p-6 rounded-lg">
-              <div className="h-60 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
-                <Image
-                  src="/images/logos/background image one..jpg"
-                  alt="Car Showcase"
-                  width={400}
-                  height={300}
-                  className="object-cover"
-                />
+            
+            {/* Navigation arrows */}
+            <button 
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full z-10 ml-2"
+              onClick={() => {
+                setAutoScrollEnabled(false);
+                if (servicesSliderRef.current) {
+                  servicesSliderRef.current.scrollLeft -= 300;
+                }
+              }}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+            <button 
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full z-10 mr-2"
+              onClick={() => {
+                setAutoScrollEnabled(false);
+                if (servicesSliderRef.current) {
+                  servicesSliderRef.current.scrollLeft += 300;
+                }
+              }}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Schedule an Appointment Section */}
+      <section className="relative overflow-hidden bg-white py-16">
+        {/* Top corner shape */}
+        <div className="absolute top-0 left-0 w-full h-24">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-0 w-full h-full">
+            <path d="M0 0L1440 0V60C1440 93.1371 1413.14 120 1380 120H60C26.8629 120 0 93.1371 0 60V0Z" fill="#030712" />
+          </svg>
+        </div>
+        
+        {/* Clean white background */}
+        <div className="absolute inset-0 bg-white pointer-events-none">
+        </div>
+        
+        <div className="container mx-auto px-4 pt-24 pb-16 relative z-10">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
+            {/* Text content */}
+            <div className="lg:w-1/2 z-10">
+              <div className="mb-6">
+                <span className="inline-block text-red-600 font-semibold tracking-wider uppercase text-sm mb-2">VISIT US</span>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 uppercase leading-tight mb-4">SCHEDULE AN <br />APPOINTMENT TODAY</h2>
+                <p className="text-gray-700 mb-8">
+                  At The Car Edition in Huntingdon, our mechanical repair service is all about keeping your car's engine ticking happily.
+                </p>
+                <Link href="/service-estimator" className="inline-block bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-4 rounded-sm transition-colors duration-300 uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                  Schedule an Appointment
+                </Link>
               </div>
-              <h3 className="text-lg font-bold text-white text-center">Sports Car</h3>
             </div>
-            <div className="bg-gray-900 p-6 rounded-lg">
-              <div className="h-60 bg-gray-800 rounded-lg flex items-center justify-center mb-4">
-                <Image
-                  src="/images/logos/background image one..jpg"
-                  alt="Car Showcase"
-                  width={400}
-                  height={300}
-                  className="object-cover"
-                />
+            
+            {/* 3D Car Image with enhanced effects */}
+            <div className="lg:w-1/2 relative perspective-[1000px] z-20">
+              {/* Clean space for car */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[70%] rotate-y-[-5deg] z-0"></div>
+              
+              {/* Car image with 3D transforms */}
+              <div className="relative w-full h-[450px] transform translate-z-32 rotate-y-[5deg] scale-110 hover:scale-115 transition-transform duration-700">
+                <div className="absolute inset-0 transform translate-y-[-20px] translate-x-[30px]">
+                  <Image
+                    src="/images/services/appointmentimage.jpg"
+                    alt="3D Car"
+                    fill
+                    className="object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.4)]"
+                    style={{
+                      filter: 'drop-shadow(0 30px 20px rgba(0,0,0,0.3))',
+                      transform: 'translateZ(100px)'
+                    }}
+                  />
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-white text-center">Electric Car</h3>
+              
+              {/* Multiple layered shadows for depth */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[85%] h-8 bg-black/15 rounded-full blur-xl z-0"></div>
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[70%] h-4 bg-black/20 rounded-full blur-lg z-0"></div>
+              
+              {/* Reflection effect */}
+              <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-[80%] h-[20px] bg-gradient-to-b from-white/30 to-transparent rounded-full blur-sm"></div>
+              
+              {/* Clean space without pop-out indicators */}
+              <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+              </div>
             </div>
           </div>
+        </div>
+        
+        {/* Bottom corner shape */}
+        <div className="absolute bottom-0 left-0 w-full h-24">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 left-0 w-full h-full transform rotate-180">
+            <path d="M0 0L1440 0V60C1440 93.1371 1413.14 120 1380 120H60C26.8629 120 0 93.1371 0 60V0Z" fill="#030712" />
+          </svg>
         </div>
       </section>
 

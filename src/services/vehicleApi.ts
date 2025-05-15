@@ -1,67 +1,143 @@
 /**
  * Vehicle API Service
- * Connects to the UK vehicle registration API to get vehicle details
+ * Connects to the UK Vehicle Enquiry Service API to get vehicle details
+ * https://developer-portal.driver-vehicle-licensing.api.gov.uk/apis/vehicle-enquiry-service/vehicle-enquiry-service-description.html
  */
 
-// API configuration
-const API_KEY = process.env.VEHICLE_API_KEY || 'YOUR_API_KEY_HERE'; // Replace with your actual API key
-const API_URL = 'https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles';
+// API route for vehicle lookup
+const API_URL = '/api/vehicle-lookup';
 
 // Types
 export interface VehicleDetails {
   registrationNumber: string;
   make: string;
-  model: string;
+  model: string; // Note: DVLA API doesn't provide model directly
   color: string;
   fuelType: string;
   engineCapacity: number;
   yearOfManufacture: number;
-  transmission: string;
-  bodyType: string;
-  taxStatus?: string;
-  motStatus?: string;
-  wheelplan?: string;
-  monthOfFirstRegistration?: string;
+  transmission?: string; // Not provided by DVLA API, but we might want to keep it for UI
+  bodyType?: string; // Not provided by DVLA API, but we might want to keep it for UI
+  taxStatus: string;
+  motStatus: string;
+  wheelplan: string;
+  monthOfFirstRegistration: string;
+  // Additional fields from DVLA API
+  typeApproval?: string;
+  revenueWeight?: number;
+  euroStatus?: string;
+  co2Emissions?: number;
+  markedForExport?: boolean;
+  dateOfLastV5CIssued?: string;
+  taxDueDate?: string;
+  artEndDate?: string;
+  realDrivingEmissions?: string;
 }
 
 /**
- * Fetches vehicle details by registration number
+ * Validates if a string is in a valid UK vehicle registration format
  * 
- * Note: This is a placeholder implementation. In a real application, you would need to:
- * 1. Securely store your API key in environment variables
- * 2. Implement proper error handling
- * 3. Add rate limiting and caching as needed
- * 
- * The UK DVLA API requires authentication and proper setup:
- * https://developer-portal.driver-vehicle-licensing.api.gov.uk/
+ * UK registration formats can vary, but we'll check for common patterns
+ * Examples: AB12 CDE, A123 BCD, ABC 123D, etc.
+ */
+export function isValidUKRegistration(regNumber: string): boolean {
+  // Remove all spaces and normalize
+  const normalized = regNumber.replace(/\s+/g, '').toUpperCase();
+  
+  // Basic length check (most UK plates are 7-8 characters)
+  if (normalized.length < 5 || normalized.length > 8) {
+    return false;
+  }
+  
+  // Check for valid characters (letters and numbers only)
+  if (!/^[A-Z0-9]+$/.test(normalized)) {
+    return false;
+  }
+  
+  // Common UK formats (simplified)
+  // This doesn't cover all edge cases but works for most common formats
+  const commonFormats = [
+    /^[A-Z]{2}\d{2}[A-Z]{3}$/, // AB12 CDE - Current style
+    /^[A-Z]\d{3}[A-Z]{3}$/,    // A123 BCD - Older style
+    /^[A-Z]{3}\d{3}[A-Z]?$/,   // ABC 123D or ABC 123 - Older style
+    /^\d{3}[A-Z]{3}$/,         // 123 ABC - Older style
+    /^[A-Z]\d{1,3}[A-Z]{3}$/,  // B12 ABC - Older style
+    /^[A-Z]{3}\d{1,3}[A-Z]?$/, // ABC 12D or ABC 12 - Older style
+  ];
+  
+  return commonFormats.some(format => format.test(normalized));
+}
+
+/**
+ * Fetches vehicle details by registration number from the UK Vehicle Enquiry Service API
  */
 export async function getVehicleByRegistration(regNumber: string): Promise<VehicleDetails | null> {
   try {
-    // For development/demo purposes, we'll use a mock response
-    // In production, replace this with actual API call
-    if (process.env.NODE_ENV === 'production') {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY
-        },
-        body: JSON.stringify({
-          registrationNumber: regNumber
-        })
-      });
+    // Clean up registration number (remove spaces, convert to uppercase)
+    const cleanRegNumber = regNumber.replace(/\s+/g, '').toUpperCase();
+    
+    // Make the API call to our vehicle lookup API route
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        registrationNumber: cleanRegNumber
+      })
+    });
+    
+    // Handle API errors
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Vehicle API error:', { status: response.status, data: errorData });
       
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+      // Handle specific error cases
+      if (response.status === 404) {
+        throw new Error('Vehicle not found with that registration');
+      } else if (response.status === 400) {
+        throw new Error('Invalid registration format');
+      } else if (response.status === 429) {
+        throw new Error('Too many requests, please try again later');
+      } else {
+        throw new Error(`API error (${response.status})`);
       }
-      
-      return await response.json();
-    } else {
-      // Mock response for development
-      return mockVehicleResponse(regNumber);
     }
+    
+    // Parse the API response
+    const data = await response.json();
+    
+    // Map the API response to our VehicleDetails interface
+    return {
+      registrationNumber: data.registrationNumber,
+      make: data.make || 'Unknown',
+      model: data.model || 'Not provided by DVLA',
+      color: data.colour || 'Unknown',
+      fuelType: data.fuelType || 'Unknown',
+      engineCapacity: data.engineCapacity || 0,
+      yearOfManufacture: data.yearOfManufacture || 0,
+      transmission: data.transmission || 'Unknown',
+      bodyType: data.bodyType || 'Unknown',
+      taxStatus: data.taxStatus || 'Unknown',
+      motStatus: data.motStatus || 'Unknown',
+      wheelplan: data.wheelplan || '',
+      monthOfFirstRegistration: data.monthOfFirstRegistration || '',
+      // Additional fields from DVLA API
+      typeApproval: data.typeApproval,
+      revenueWeight: data.revenueWeight,
+      euroStatus: data.euroStatus,
+      co2Emissions: data.co2Emissions,
+      markedForExport: data.markedForExport,
+      dateOfLastV5CIssued: data.dateOfLastV5CIssued,
+      taxDueDate: data.taxDueDate,
+      artEndDate: data.artEndDate,
+      realDrivingEmissions: data.realDrivingEmissions
+    };
   } catch (error) {
     console.error('Error fetching vehicle data:', error);
+    if (error instanceof Error) {
+      throw error; // Re-throw the error to be handled by the caller
+    }
     return null;
   }
 }
@@ -176,5 +252,16 @@ function mockVehicleResponse(regNumber: string): VehicleDetails {
     bodyType,
     taxStatus: 'Taxed',
     motStatus: 'Valid',
+    wheelplan: 'NON STANDARD',
+    monthOfFirstRegistration: `${year}-01`,
+    typeApproval: 'M1',
+    revenueWeight: 1500,
+    euroStatus: 'EURO 5',
+    co2Emissions: 120,
+    markedForExport: false,
+    dateOfLastV5CIssued: '2020-01-01',
+    taxDueDate: '2025-01-01',
+    artEndDate: '2025-01-01',
+    realDrivingEmissions: '1'
   };
 }
