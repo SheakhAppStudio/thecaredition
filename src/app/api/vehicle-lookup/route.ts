@@ -5,8 +5,9 @@ const API_KEY = '9ZHydbY7cj4qMAYGTDobqazRuY8tRyDX4hbS3sT7';
 const API_URL = 'https://driver-vehicle-licensing.api.gov.uk/vehicle-enquiry/v1/vehicles';
 
 /**
- * API route handler for vehicle lookup
+ * API route handlers for vehicle lookup
  * Acts as a proxy to the DVLA Vehicle Enquiry Service API
+ * Supports both GET and POST methods for different client implementations
  */
 export async function POST(request: NextRequest) {
   try {
@@ -100,6 +101,93 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('Error in vehicle lookup API route:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * GET handler for vehicle lookup
+ * Used by the chatbot to fetch vehicle details
+ */
+export async function GET(request: NextRequest) {
+  try {
+    // Get the registration number from query parameters
+    const { searchParams } = new URL(request.url);
+    const registrationNumber = searchParams.get('registration');
+    
+    // Validate the registration number
+    if (!registrationNumber) {
+      return NextResponse.json(
+        { error: 'Registration number is required' },
+        { status: 400 }
+      );
+    }
+    
+    // Clean up registration number (remove spaces, convert to uppercase)
+    const cleanRegNumber = registrationNumber.replace(/\s+/g, '').toUpperCase();
+    
+    // Make the API call to the Vehicle Enquiry Service
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY
+      },
+      body: JSON.stringify({
+        registrationNumber: cleanRegNumber
+      })
+    });
+    
+    // Get the response data
+    const data = await response.json();
+    
+    // Handle API errors
+    if (!response.ok) {
+      console.error('Vehicle API error:', { status: response.status, data });
+      
+      // Return appropriate error response based on status code
+      if (response.status === 404) {
+        return NextResponse.json(
+          { error: 'Vehicle not found with that registration' },
+          { status: 404 }
+        );
+      } else if (response.status === 400) {
+        return NextResponse.json(
+          { error: 'Invalid registration format' },
+          { status: 400 }
+        );
+      } else if (response.status === 429) {
+        return NextResponse.json(
+          { error: 'Too many requests, please try again later' },
+          { status: 429 }
+        );
+      } else {
+        return NextResponse.json(
+          { error: `API error (${response.status})` },
+          { status: response.status }
+        );
+      }
+    }
+    
+    // Format the response for the chatbot
+    const vehicleDetails = {
+      registrationNumber: data.registrationNumber,
+      make: data.make || 'Unknown',
+      model: 'Not provided by DVLA',
+      yearOfManufacture: data.yearOfManufacture || 'Unknown',
+      engineSize: data.engineCapacity ? `${data.engineCapacity}cc` : 'Unknown',
+      fuelType: data.fuelType || 'Unknown',
+      color: data.colour || 'Unknown'
+    };
+    
+    // Return successful response with vehicle details
+    return NextResponse.json(vehicleDetails);
+    
+  } catch (error) {
+    console.error('Error in vehicle lookup API route (GET):', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

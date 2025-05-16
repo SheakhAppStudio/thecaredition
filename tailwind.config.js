@@ -86,14 +86,20 @@ module.exports = {
           950: '#020617',
         },
         orange: {
-          DEFAULT: '#ff6b00',
+          DEFAULT: '#ff8000',
           dark: '#e05e00',
-          light: '#ff8a3c',
+          light: '#fb9929',
+        },
+        red: {
+          DEFAULT: '#c40b0b',
+          600: '#c40b0b',
+          700: '#b91c1c',
         },
       },
       fontFamily: {
         sans: ['var(--font-inter)'],
         heading: ['var(--font-poppins)'],
+        lato: ['var(--font-lato)'],
       },
     },
   },

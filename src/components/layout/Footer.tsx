@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white py-12">
+    <footer className="bg-black text-white py-12 font-heading">
       <div className="container mx-auto px-4">
         {/* Logo and social media */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12">
@@ -42,11 +42,11 @@ export default function Footer() {
         {/* Footer links */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <h4 className="text-lg font-bold mb-4 text-orange">About Us</h4>
+            <h4 className="text-lg font-bold mb-4 text-orange uppercase">About Us</h4>
             <p className="text-gray-400 mb-4">Premium automotive care service dedicated to maintaining and enhancing your vehicle's appearance and performance.</p>
           </div>
           <div>
-            <h4 className="text-lg font-bold mb-4 text-orange">Services</h4>
+            <h4 className="text-lg font-bold mb-4 text-orange uppercase">Services</h4>
             <ul className="space-y-2">
               <li><Link href="/services/detailing" className="text-gray-400 hover:text-white transition-colors">Detailing</Link></li>
               <li><Link href="/services/ceramic-coating" className="text-gray-400 hover:text-white transition-colors">Ceramic Coating</Link></li>
@@ -55,7 +55,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-lg font-bold mb-4 text-orange">Quick Links</h4>
+            <h4 className="text-lg font-bold mb-4 text-orange uppercase">Quick Links</h4>
             <ul className="space-y-2">
               <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
               <li><Link href="/about" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
@@ -64,7 +64,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-lg font-bold mb-4 text-orange">Contact Us</h4>
+            <h4 className="text-lg font-bold mb-4 text-orange uppercase">Contact Us</h4>
             <address className="text-gray-400 not-italic">
               <p className="mb-2">123 Car Street</p>
               <p className="mb-2">Automotive City, AC 12345</p>
