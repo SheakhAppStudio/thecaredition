@@ -7,5 +7,6 @@ interface IconWrapperProps {
 }
 
 export const IconWrapper: React.FC<IconWrapperProps> = ({ icon: Icon, className }) => {
+  // @ts-ignore - Ignoring the IconType JSX error
   return <Icon className={className} aria-hidden="true" />;
 };
