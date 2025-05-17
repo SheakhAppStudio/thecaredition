@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { FaQuoteLeft, FaQuoteRight, FaArrowLeft, FaArrowRight, FaGoogle } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaGoogle } from 'react-icons/fa';
 import { BsStarFill } from 'react-icons/bs';
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
 
 interface Review {
   id: string;
@@ -27,6 +28,7 @@ export default function TestimonialsCarousel({
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch reviews from Google
@@ -39,67 +41,51 @@ export default function TestimonialsCarousel({
         const realReviews: Review[] = [
           {
             id: '1',
-            author: 'Liam Benson',
+            author: 'Phil Woods',
             rating: 5,
-            text: 'I recently had a problem with my car and needed a garage quickly. I found The Car Edition and they were able to fit me in the same day. The service was excellent, they diagnosed the problem quickly and had my car back on the road the same day. The price was very reasonable and the service was excellent. I would highly recommend them.',
+            text: 'Orci facilisis gravida urna turpis ac porttitor leo idoi accumsan faucibus ipsum in dui justo aliquet tortora aliquet pharetra neque massa ametmel egeto in porttitor in quis libero faucibus.',
             date: '2023-11-15',
             photoUrl: '/images/testimonials/avatar1.jpg'
           },
           {
             id: '2',
-            author: 'Ricky Rai',
+            author: 'Sophie Moore',
             rating: 5,
-            text: 'Excellent service. Had my car in for a service and MOT. Great communication and service. Highly recommend.',
+            text: 'Orci facilisis gravida urna turpis ac porttitor leo idoi accumsan faucibus ipsum in dui justo aliquet tortora aliquet pharetra neque massa ametmel egeto in porttitor in quis libero faucibus.',
             date: '2023-10-22',
             photoUrl: '/images/testimonials/avatar2.jpg'
           },
           {
             id: '3',
-            author: 'Sarah Johnson',
+            author: 'Mike Warren',
             rating: 5,
-            text: 'The team at The Car Edition did an amazing job diagnosing and fixing the issue with my BMW. They were transparent about the costs and kept me updated throughout the process. My car runs better than ever now!',
+            text: 'Orci facilisis gravida urna turpis ac porttitor leo idoi accumsan faucibus ipsum in dui justo aliquet tortora aliquet pharetra neque massa ametmel egeto in porttitor in quis libero faucibus.',
             date: '2023-09-18',
             photoUrl: '/images/testimonials/avatar3.jpg'
           },
           {
             id: '4',
-            author: 'Jess Mawby',
+            author: 'Jessica Smith',
             rating: 5,
-            text: 'Fantastic service, very friendly and helpful staff. Definitely recommend.',
+            text: 'Orci facilisis gravida urna turpis ac porttitor leo idoi accumsan faucibus ipsum in dui justo aliquet tortora aliquet pharetra neque massa ametmel egeto in porttitor in quis libero faucibus.',
             date: '2023-08-30',
             photoUrl: '/images/testimonials/avatar4.jpg'
           },
           {
             id: '5',
-            author: 'Aimee Benson',
+            author: 'David Johnson',
             rating: 5,
-            text: 'Brilliant service, very helpful and friendly. Highly recommend.',
+            text: 'Orci facilisis gravida urna turpis ac porttitor leo idoi accumsan faucibus ipsum in dui justo aliquet tortora aliquet pharetra neque massa ametmel egeto in porttitor in quis libero faucibus.',
             date: '2023-08-25',
             photoUrl: '/images/testimonials/avatar5.jpg'
           },
           {
             id: '6',
-            author: 'Yvonne Benson',
+            author: 'Emma Wilson',
             rating: 5,
-            text: 'Excellent garage, very helpful and friendly. Highly recommend.',
+            text: 'Orci facilisis gravida urna turpis ac porttitor leo idoi accumsan faucibus ipsum in dui justo aliquet tortora aliquet pharetra neque massa ametmel egeto in porttitor in quis libero faucibus.',
             date: '2023-08-20',
             photoUrl: '/images/testimonials/avatar6.jpg'
-          },
-          {
-            id: '7',
-            author: 'Jeanette Benson',
-            rating: 5,
-            text: 'Excellent service, very friendly and helpful. Would definitely recommend.',
-            date: '2023-08-15',
-            photoUrl: '/images/testimonials/avatar7.jpg'
-          },
-          {
-            id: '8',
-            author: 'Callum Benson',
-            rating: 5,
-            text: 'Great service, very helpful and friendly. Would definitely recommend.',
-            date: '2023-08-10',
-            photoUrl: '/images/testimonials/avatar8.jpg'
           }
         ];
         
@@ -108,6 +94,7 @@ export default function TestimonialsCarousel({
         setReviews(fiveStarReviews);
       } catch (error) {
         console.error('Error fetching reviews:', error);
+        setReviews([]);
       } finally {
         setLoading(false);
       }
@@ -116,12 +103,16 @@ export default function TestimonialsCarousel({
     fetchReviews();
   }, [limit]);
 
-  // Auto-rotate testimonials
+  // Auto-advance carousel
   useEffect(() => {
-    if (loading || reviews.length === 0 || isPaused) return;
+    if (isPaused || reviews.length <= 1) return;
+    
+    // Calculate the number of pages (each page shows 3 reviews)
+    const pageCount = Math.ceil(reviews.length / 3);
+    if (pageCount <= 1) return; // Don't auto-advance if there's only one page
     
     timerRef.current = setInterval(() => {
-      setActiveIndex(prevIndex => (prevIndex + 1) % reviews.length);
+      handleNext();
     }, autoplaySpeed);
     
     return () => {
@@ -129,18 +120,22 @@ export default function TestimonialsCarousel({
         clearInterval(timerRef.current);
       }
     };
-  }, [loading, reviews.length, autoplaySpeed, isPaused]);
+  }, [isPaused, activeIndex, reviews.length, autoplaySpeed]);
 
   const handlePrev = () => {
-    setActiveIndex(prevIndex => (prevIndex - 1 + reviews.length) % reviews.length);
+    // Each page shows 3 reviews, so we need to calculate the total number of pages
+    const totalPages = Math.ceil(reviews.length / 3);
+    if (totalPages <= 1) return; // Don't navigate if there's only one page
+    
+    setActiveIndex(prevIndex => (prevIndex - 1 + totalPages) % totalPages);
   };
 
   const handleNext = () => {
-    setActiveIndex(prevIndex => (prevIndex + 1) % reviews.length);
-  };
-
-  const handleDotClick = (index: number) => {
-    setActiveIndex(index);
+    // Each page shows 3 reviews, so we need to calculate the total number of pages
+    const totalPages = Math.ceil(reviews.length / 3);
+    if (totalPages <= 1) return; // Don't navigate if there's only one page
+    
+    setActiveIndex(prevIndex => (prevIndex + 1) % totalPages);
   };
 
   // Format date to readable format
@@ -157,141 +152,176 @@ export default function TestimonialsCarousel({
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
+  
+  // Track window resize for responsive design
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    // Set initial screen width
+    handleResize();
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <div className="relative bg-black py-16 overflow-hidden">
-      {/* Background design elements */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10">
-        <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-orange-500 blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-orange-600 blur-3xl"></div>
-      </div>
-      
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white uppercase mb-2">
-            Customer <span className="text-orange-500">Testimonials</span>
+    <div className="bg-black py-12 sm:py-16 md:py-20">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-4xl sm:text-5xl font-bold mb-3 sm:mb-4 uppercase tracking-wide">
+            <span className="text-white">WHAT OUR </span>
+            <span className="text-white">CLIENTS</span>
           </h2>
-          <div className="flex items-center justify-center">
-            {/* @ts-ignore */}
-            <FaGoogle className="text-white mr-2" />
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                // @ts-ignore
-                <BsStarFill key={i} className="text-yellow-400 mx-0.5" />
-              ))}
-            </div>
-            <span className="ml-2 text-sm text-gray-400">Based on {reviews.length}+ reviews</span>
-          </div>
+          <h3 className="text-3xl sm:text-4xl font-bold uppercase tracking-wide text-white mb-8">
+            <span>SAY ABOUT US</span>
+          </h3>
         </div>
         
         {loading ? (
           <div className="flex justify-center py-16">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-orange-500"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#f56e13]"></div>
           </div>
         ) : (
-          <div 
-            className="relative"
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
-          >
-            {/* Main testimonial carousel */}
-            <div className="max-w-4xl mx-auto">
-              {reviews.map((review, index) => (
-                <div 
-                  key={review.id}
-                  className={`transition-all duration-700 transform ${
-                    index === activeIndex 
-                      ? 'opacity-100 scale-100' 
-                      : 'opacity-0 scale-95 absolute top-0 left-0'
-                  }`}
-                  style={{ display: index === activeIndex ? 'block' : 'none' }}
-                >
-                  <div className="bg-gray-900 p-8 rounded-lg border border-gray-800 shadow-2xl">
-                    <div className="flex items-center mb-6">
-                      <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-orange-500">
-                        {review.photoUrl ? (
-                          <Image 
-                            src={review.photoUrl} 
-                            alt={review.author} 
-                            fill
-                            className="object-cover"
+          <div className="relative" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+            {/* Testimonials Cards Slider */}
+            <div className="relative overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+              >
+                {/* Display multiple cards in a row */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full flex-shrink-0">
+                  {reviews.slice(0, 3).map((review) => (
+                    <div 
+                      key={review.id} 
+                      className="bg-white p-6 rounded-none shadow-md flex flex-col h-full"
+                    >
+                      <div className="flex items-center mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <BsStarFill 
+                            key={i} 
+                            className={i < review.rating ? "text-yellow-400" : "text-gray-300"} 
+                            size={18} 
                           />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                            <span className="text-white text-xl font-bold">{review.author.charAt(0)}</span>
-                          </div>
-                        )}
+                        ))}
+                        <span className="ml-2 text-sm text-gray-600">
+                          {review.rating} of 5
+                        </span>
                       </div>
-                      <div className="ml-4">
-                        <h3 className="text-xl font-bold text-white">{review.author}</h3>
-                        <div className="flex items-center">
-                          {[...Array(review.rating)].map((_, i) => (
-                            // @ts-ignore
-                            <BsStarFill key={i} className="text-yellow-400 mr-1" />
-                          ))}
-                          <span className="text-sm text-gray-400 ml-2">{formatDate(review.date)}</span>
+                      
+                      <p className="text-gray-600 mb-6 flex-grow">
+                        {truncateText(review.text, 150)}
+                      </p>
+                      
+                      <div className="flex items-center mt-auto">
+                        <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+                          {review.photoUrl ? (
+                            <Image 
+                              src={review.photoUrl} 
+                              alt={review.author} 
+                              width={48} 
+                              height={48} 
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                              <span className="text-gray-600 font-bold">{review.author.charAt(0)}</span>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-800 uppercase">{review.author}</h3>
+                          <p className="text-gray-500 text-sm">LOS ANGELES, CA</p>
                         </div>
                       </div>
                     </div>
-                    
-                    <div className="relative text-gray-300 text-lg">
-                      {/* @ts-ignore */}
-                      <FaQuoteLeft className="absolute -top-4 -left-2 text-orange-500 opacity-30 text-4xl" />
-                      <p className="px-6 py-2">{truncateText(review.text)}</p>
-                      {/* @ts-ignore */}
-                      <FaQuoteRight className="absolute -bottom-4 right-0 text-orange-500 opacity-30 text-4xl" />
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+                
+                {reviews.length > 3 && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full flex-shrink-0">
+                    {reviews.slice(3, 6).map((review) => (
+                      <div 
+                        key={review.id} 
+                        className="bg-white p-6 rounded-none shadow-md flex flex-col h-full"
+                      >
+                        <div className="flex items-center mb-4">
+                          {[...Array(5)].map((_, i) => (
+                            <BsStarFill 
+                              key={i} 
+                              className={i < review.rating ? "text-yellow-400" : "text-gray-300"} 
+                              size={18} 
+                            />
+                          ))}
+                          <span className="ml-2 text-sm text-gray-600">
+                            {review.rating} of 5
+                          </span>
+                        </div>
+                        
+                        <p className="text-gray-600 mb-6 flex-grow">
+                          {truncateText(review.text, 150)}
+                        </p>
+                        
+                        <div className="flex items-center mt-auto">
+                          <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            {review.photoUrl ? (
+                              <Image 
+                                src={review.photoUrl} 
+                                alt={review.author} 
+                                width={48} 
+                                height={48} 
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-600 font-bold">{review.author.charAt(0)}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-800 uppercase">{review.author}</h3>
+                            <p className="text-gray-500 text-sm">LOS ANGELES, CA</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             
-            {/* Navigation controls */}
-            <div className="flex justify-between items-center mt-8">
-              <button 
+            {/* Navigation Controls */}
+            <div className="flex justify-center mt-8 items-center">
+              <button
                 onClick={handlePrev}
-                className="bg-gray-800 hover:bg-orange-600 text-white p-3 rounded-full transition-colors duration-300"
-                aria-label="Previous testimonial"
+                className="bg-transparent text-white hover:text-[#f56e13] transition-colors duration-300 mx-4"
+                aria-label="Previous testimonials"
               >
-                {/* @ts-ignore */}
-                <FaArrowLeft />
+                <HiOutlineChevronLeft className="w-10 h-10" />
               </button>
               
-              <div className="flex space-x-2">
-                {reviews.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleDotClick(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                      index === activeIndex ? 'bg-orange-500 w-6' : 'bg-gray-600 hover:bg-gray-500'
-                    }`}
-                    aria-label={`Go to testimonial ${index + 1}`}
-                  />
-                ))}
-              </div>
-              
-              <button 
+              <button
                 onClick={handleNext}
-                className="bg-gray-800 hover:bg-orange-600 text-white p-3 rounded-full transition-colors duration-300"
-                aria-label="Next testimonial"
+                className="bg-transparent text-white hover:text-[#f56e13] transition-colors duration-300 mx-4"
+                aria-label="Next testimonials"
               >
-                {/* @ts-ignore */}
-                <FaArrowRight />
+                <HiOutlineChevronRight className="w-10 h-10" />
               </button>
             </div>
           </div>
         )}
         
         {/* Call to action */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <a 
             href="https://g.co/kgs/pGmWczy" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded font-bold transition-all duration-300 shadow-lg transform hover:scale-105 hover:shadow-orange-500/30"
+            className="inline-flex items-center bg-[#f56e13] hover:bg-[#d15000] text-white px-5 sm:px-8 py-3 sm:py-4 rounded font-medium sm:font-bold text-sm sm:text-base transition-all duration-300 shadow-lg transform hover:scale-105 hover:shadow-[#f56e13]/30"
           >
-            {/* @ts-ignore */}
-            <FaGoogle className="mr-2" />
+            <FaGoogle className="mr-2 w-4 h-4 sm:w-5 sm:h-5" />
             <span>View All Reviews on Google</span>
           </a>
         </div>

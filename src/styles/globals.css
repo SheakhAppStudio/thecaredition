@@ -25,33 +25,68 @@
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-md font-medium transition-colors duration-200;
+    @apply inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 rounded-md font-medium transition-all duration-200 text-sm sm:text-base;
   }
   .btn-primary {
-    @apply bg-orange text-white hover:bg-orange-dark;
+    @apply bg-[#f56e13] text-white hover:bg-[#d15000] hover:scale-105;
   }
   .btn-secondary {
-    @apply bg-secondary-200 text-secondary-900 hover:bg-secondary-300;
+    @apply bg-gray-800 text-white hover:bg-gray-700 hover:scale-105;
   }
   .btn-red {
-    @apply bg-red-600 text-white hover:bg-red-700;
+    @apply bg-red-600 text-white hover:bg-red-700 hover:scale-105;
   }
   .container {
     @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
   }
   .section {
-    @apply py-12 sm:py-16 lg:py-24;
+    @apply py-10 sm:py-12 md:py-16 lg:py-24;
   }
   .section-title {
-    @apply text-3xl md:text-4xl font-bold mb-8;
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 md:mb-8;
   }
   .section-subtitle {
-    @apply text-xl md:text-2xl font-medium text-orange italic;
+    @apply text-lg sm:text-xl md:text-2xl font-medium text-[#f56e13] italic;
   }
   .card {
-    @apply bg-gray-900 rounded-lg overflow-hidden transition-all duration-300;
+    @apply bg-gray-900 rounded-lg overflow-hidden transition-all duration-300 shadow-md;
   }
   .card:hover {
-    @apply transform shadow-lg;
+    @apply transform shadow-lg scale-[1.02];
+  }
+  
+  /* Responsive image classes */
+  .responsive-image {
+    @apply w-full h-auto object-cover;
+  }
+  
+  /* Responsive text classes */
+  .responsive-text-sm {
+    @apply text-xs sm:text-sm md:text-base;
+  }
+  .responsive-text-base {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+  .responsive-text-lg {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+  .responsive-text-xl {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  
+  /* Responsive spacing classes */
+  .responsive-p {
+    @apply p-3 sm:p-4 md:p-6 lg:p-8;
+  }
+  .responsive-py {
+    @apply py-3 sm:py-4 md:py-6 lg:py-8;
+  }
+  .responsive-px {
+    @apply px-3 sm:px-4 md:px-6 lg:px-8;
+  }
+  
+  /* Responsive gap classes */
+  .responsive-gap {
+    @apply gap-2 sm:gap-3 md:gap-4 lg:gap-6;
   }
 }

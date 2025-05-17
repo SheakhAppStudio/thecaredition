@@ -78,29 +78,31 @@ export default function Home() {
   return (
     <main className="bg-black text-white font-heading">
       {/* Hero Section */}
-      <section className="relative h-screen flex flex-col items-center justify-between">
+      <section className="relative min-h-[100svh] flex flex-col items-center justify-between">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/logos/backgroundlogo2.jpg"
             alt="Car Workshop"
             fill
             priority
-            className="object-cover brightness-50"
+            className="object-cover brightness-50 w-full h-full"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
+            style={{ objectPosition: 'center' }}
           />
         </div>
-        <div className="container mx-auto relative z-10 text-white px-4 pt-48 md:pt-56 pb-16 flex items-center">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-2 uppercase italic">
+        <div className="container mx-auto relative z-10 text-white px-4 pt-28 sm:pt-36 md:pt-48 lg:pt-56 pb-16 flex items-center justify-center sm:justify-start">
+          <div className="max-w-3xl w-full text-center sm:text-left">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 uppercase italic">
               <span className="text-white">CAR CARE</span>
             </h1>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 uppercase italic">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 uppercase italic">
               <span style={{ color: '#fb9929' }}>REDEFINED</span>
             </h2>
-            <p className="text-lg md:text-xl max-w-2xl mb-8 text-gray-300">
+            <p className="text-base sm:text-lg md:text-xl max-w-2xl mb-6 sm:mb-8 text-gray-300 mx-auto sm:mx-0">
               Professional car care services for your premium vehicle
             </p>
-            <div className="flex flex-wrap gap-4 mb-16">
-              <Link href="/service-estimator" className="text-white px-8 py-3 font-medium transition-colors duration-200 flex items-center uppercase italic" style={{ backgroundColor: '#c40b0b' }}>
+            <div className="flex flex-wrap gap-3 sm:gap-4 mb-10 sm:mb-16 justify-center sm:justify-start">
+              <Link href="/service-estimator" className="text-white px-8 py-3 font-medium transition-colors duration-200 flex items-center uppercase italic hover:bg-red-800" style={{ backgroundColor: '#c40b0b' }}>
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                 </svg>
@@ -1048,38 +1050,38 @@ export default function Home() {
       <TestimonialsCarousel limit={6} autoplaySpeed={6000} />
 
       {/* Newsletter Section */}
-      <section className="py-16 bg-gray-950 text-white">
+      <section className="py-12 sm:py-16 bg-gray-950 text-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="md:w-1/2">
-              <h2 className="text-3xl md:text-4xl font-bold mb-2">
+          <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-8">
+            <div className="w-full md:w-1/2">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 text-center md:text-left">
                 <span className="text-white">Why wait? Join</span>
               </h2>
-              <h3 className="text-3xl md:text-4xl font-bold mb-6">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6 text-center md:text-left">
                 <span className="text-[#f56e13]">The Car Edition</span>
               </h3>
-              <p className="text-gray-400 mb-4">
+              <p className="text-gray-400 mb-4 text-center md:text-left text-sm sm:text-base">
                 Subscribe to our newsletter for exclusive offers, tips, and the latest news in automotive care and maintenance.
               </p>
             </div>
-            <div className="md:w-1/2">
-              <div className="bg-gray-900 p-6 rounded-lg">
-                <form className="flex flex-col gap-4">
+            <div className="w-full md:w-1/2">
+              <div className="bg-gray-900 p-4 sm:p-6 rounded-lg shadow-lg">
+                <form className="flex flex-col gap-3 sm:gap-4">
                   <input 
                     type="text" 
                     placeholder="Your Name" 
-                    className="px-4 py-3 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-orange"
+                    className="px-4 py-2 sm:py-3 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#f56e13] text-sm sm:text-base"
                     required
                   />
                   <input 
                     type="email" 
                     placeholder="Your Email Address" 
-                    className="px-4 py-3 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-orange"
+                    className="px-4 py-2 sm:py-3 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#f56e13] text-sm sm:text-base"
                     required
                   />
                   <button 
                     type="submit" 
-                    className="bg-[#f56e13] hover:bg-[#d15000] text-white px-6 py-3 rounded-md font-medium transition-colors duration-200"
+                    className="bg-[#f56e13] hover:bg-[#d15000] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md font-medium transition-colors duration-200 text-sm sm:text-base"
                   >
                     SUBSCRIBE NOW
                   </button>
