@@ -134,10 +134,10 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <Link href="/sales" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Sales
+            <a href="https://thecaredition.shop/password" target="_blank" rel="noopener noreferrer" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
+              Shop
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
+            </a>
             <Link href="/services" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
               Services
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
@@ -146,10 +146,11 @@ export default function Header() {
               Service Estimator
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
             </Link>
-            <Link href="/shop" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Shop
+            <Link href="/videos" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
+              Videos
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
             </Link>
+
             <Link href="/about" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
               About Us
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
@@ -217,14 +218,16 @@ export default function Header() {
           {/* Mobile Menu Content */}
           <div className="px-6 py-8">
             <nav className="flex flex-col space-y-5">
-              <Link 
-                href="/sales" 
+              <a 
+                href="https://thecaredition.shop/password" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
                 onClick={closeMobileMenu}
               >
-                <span>Sales</span>
+                <span>Shop</span>
                 <span className="text-[#f56e13]">→</span>
-              </Link>
+              </a>
               <Link 
                 href="/services" 
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
@@ -242,13 +245,14 @@ export default function Header() {
                 <span className="text-[#f56e13]">→</span>
               </Link>
               <Link 
-                href="/shop" 
+                href="/videos" 
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
                 onClick={closeMobileMenu}
               >
-                <span>Shop</span>
+                <span>Videos</span>
                 <span className="text-[#f56e13]">→</span>
               </Link>
+
               <Link 
                 href="/about" 
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"

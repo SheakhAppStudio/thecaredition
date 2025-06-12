@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isValidUKRegistration } from '@/services/vehicleApi';
 
 // Types for our chatbot
 interface Message {
@@ -27,13 +28,13 @@ interface CustomerData {
   query: string;
 }
 
-// Google Apps Script Web App URL - Replace with your deployed script URL when ready
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec';
+// Google Apps Script URL - using the exact same one as the service estimator
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgO6NKDDGYqwj6qWrpzQRnuz3CKgmdYQEfDyk3oiCzguKrwisG0louyp6XvOoah3IAgg/exec';
 
 const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
+  const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [customerData, setCustomerData] = useState<CustomerData>({
     name: '',
@@ -44,25 +45,26 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
     vehicleModel: '',
     vehicleYear: '',
     engineSize: '',
-    query: '',
+    query: ''
   });
-  const [isOpen, setIsOpen] = useState(true);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Chat steps
+  // Chat steps - more human-like conversation flow
   const chatSteps = [
     { 
-      message: "👋 Hello! Welcome to The Car Edition. I'm your virtual assistant. How can I help you today?",
+      message: "👋 Hi there! I'm Sarah from The Car Edition. How can I help you today?",
       options: ["Service Booking", "Get a Quote", "Ask a Question"]
     },
-    { message: "Great! Could you please tell me your name?" },
-    { message: "Nice to meet you! Could you please provide your email address?" },
-    { message: "Thanks! Now, could you share your phone number?" },
-    { message: "Now, could you please enter your car registration number? (e.g., AB12 CDE)" },
-    { message: "Thanks! I'll verify that registration..." },
-    { message: "Could you please tell me what services you're interested in?" },
-    { message: "Thank you for all the information! Is there anything specific you'd like to mention about your request?" },
-    { message: "Thank you! Your information has been submitted. One of our customer service representatives will contact you shortly. Is there anything else I can help you with?" }
+    { message: "Great choice! I'd love to help you with that. First, could I get your name please?" },
+    { message: "Nice to meet you! I'll need a few details to help you better. Could you share your email address?" },
+    { message: "Perfect, thanks! Now I'll need your phone number so our team can reach you." },
+    { message: "Almost there! Could you please enter your car registration number? (e.g., AB12 CDE)" },
+    { message: "Thanks! I'll check that registration for you..." },
+    { message: "Now, could you tell me what specific services you're interested in? For example: MOT, Service, Repairs, etc." },
+    { message: "Thanks for all that information! Is there anything else you'd like to add about your request? Any specific issues with your car or preferred appointment times?" },
+    { message: "Great! I've submitted your information to our team. Someone will contact you shortly on the phone number you provided. Is there anything else I can help with today?" }
   ];
 
   // Auto-scroll to bottom when messages change
@@ -70,12 +72,17 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Start the chat with initial greeting when isOpen changes
+  // Start the chat with initial greeting only once when component mounts
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      addBotMessage(chatSteps[0].message, chatSteps[0].options);
+    // Only add the initial message if there are no messages yet
+    if (messages.length === 0) {
+      // Use a timeout to ensure this only happens once after the component is fully mounted
+      const timer = setTimeout(() => {
+        addBotMessage(chatSteps[0].message, chatSteps[0].options);
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, []);
 
   // Add a bot message with typing effect
   const addBotMessage = (text: string, options?: string[]) => {
@@ -167,7 +174,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
         setCurrentStep(5);
         addBotMessage(chatSteps[5].message);
         
-        // Verify registration with DVSA API
+        // Verify registration with DVSA API - more human-like responses
         try {
           setIsTyping(true);
           const vehicleData = await fetchVehicleData(input);
@@ -175,29 +182,30 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
           
           if (vehicleData) {
             newData.vehicleMake = vehicleData.make;
+            newData.vehicleModel = vehicleData.model || '';
             newData.vehicleYear = vehicleData.yearOfManufacture;
-            newData.engineSize = vehicleData.engineSize;
+            newData.engineSize = vehicleData.engineCapacity ? `${vehicleData.engineCapacity}cc` : '';
             setCustomerData(newData);
             
-            addBotMessage(`I've found your vehicle: ${vehicleData.make} (${vehicleData.yearOfManufacture}), ${vehicleData.engineSize} engine. Is this correct?`, ["Yes", "No"]);
+            addBotMessage(`Great! I've found your ${vehicleData.color} ${vehicleData.make} from ${vehicleData.yearOfManufacture}${vehicleData.engineCapacity ? `, with a ${vehicleData.engineCapacity}cc ${vehicleData.fuelType} engine` : ''}. Is this correct?`, ["Yes, that's my car", "No, that's not right"]);
             setCurrentStep(6);
           } else {
-            addBotMessage("I couldn't verify that registration. Let's continue anyway. What services are you interested in?");
+            addBotMessage("I couldn't find details for that registration number in our system. No worries though! Let's continue with your inquiry. What services are you interested in?");
             setCurrentStep(6);
           }
         } catch (error) {
           console.error("Error fetching vehicle data:", error);
-          addBotMessage("I couldn't verify that registration. Let's continue anyway. What services are you interested in?");
+          addBotMessage("Sorry, I'm having trouble checking that registration number right now. Let's continue anyway. What services are you interested in?");
           setCurrentStep(6);
         }
         break;
       
       case 5: // Vehicle verification confirmation
-        if (input.toLowerCase() === 'yes' || input.toLowerCase() === 'y') {
+        if (input.toLowerCase().includes('yes')) {
           setCurrentStep(6);
           addBotMessage(chatSteps[6].message);
         } else {
-          addBotMessage("No problem. Could you please tell me your vehicle make?");
+          addBotMessage("No problem at all! Let me get those details from you instead. What make is your vehicle? (For example: Ford, BMW, Toyota, etc.)");
           setCurrentStep(5.1);
         }
         break;
@@ -205,22 +213,22 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
       case 5.1: // Manual vehicle make
         newData.vehicleMake = input;
         setCustomerData(newData);
-        addBotMessage("And what year was your vehicle manufactured?");
+        addBotMessage("Thanks! And what year was your vehicle manufactured? Just the year is fine.");
         setCurrentStep(5.2);
         break;
       
       case 5.2: // Manual vehicle year
         newData.vehicleYear = input;
         setCustomerData(newData);
-        addBotMessage("What is your engine size (if you know it)?");
+        addBotMessage("Almost done with the vehicle details! If you know your engine size, please tell me (e.g., 1.6L, 2000cc). If not, just type 'unknown'.");
         setCurrentStep(5.3);
         break;
       
       case 5.3: // Manual engine size
-        newData.engineSize = input;
+        newData.engineSize = input === 'unknown' ? '' : input;
         setCustomerData(newData);
         setCurrentStep(6);
-        addBotMessage(chatSteps[6].message);
+        addBotMessage("Thanks for providing those details! " + chatSteps[6].message);
         break;
       
       case 6: // Services interested in
@@ -231,29 +239,47 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
         break;
       
       case 7: // Additional notes
-        // Submit the data directly to Google Apps Script
-        try {
-          setIsTyping(true);
-          const formData = new FormData();
-          formData.append('data', JSON.stringify({
-            name: newData.name,
-            email: newData.email,
-            phone: newData.phone,
-            carRegistration: newData.carRegistration,
-            vehicleMake: newData.vehicleMake || '',
-            vehicleModel: newData.vehicleModel || '',
-            vehicleYear: newData.vehicleYear || '',
-            engineSize: newData.engineSize || '',
-            query: newData.query + " | Additional notes: " + input
-          }));
-          
-          // Send data to Google Apps Script
-          const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: formData,
-            mode: 'no-cors', // This is important for CORS issues with Google Apps Script
-            redirect: 'follow'
-          });
+          // Submit the data directly to Google Apps Script using a hidden form and iframe
+          try {
+            setIsTyping(true);
+            
+            // Create a form that submits to the hidden iframe
+            if (formRef.current) {
+              // Set the form properties
+              formRef.current.action = GOOGLE_SCRIPT_URL;
+              formRef.current.method = 'POST';
+              formRef.current.target = 'hidden-iframe'; // Submit to the iframe to prevent page redirect
+              
+              // Clear any existing hidden inputs
+              while (formRef.current.firstChild) {
+                formRef.current.removeChild(formRef.current.firstChild);
+              }
+              
+              // Create hidden input fields exactly matching the service estimator form
+              const addHiddenField = (name: string, value: string) => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = name;
+                input.value = value;
+                formRef.current?.appendChild(input);
+              };
+              
+              // Add all the required fields exactly as they appear in the service estimator
+              addHiddenField('timestamp', new Date().toISOString());
+              addHiddenField('name', newData.name);
+              addHiddenField('email', newData.email);
+              addHiddenField('phone', newData.phone);
+              addHiddenField('carRegistration', newData.carRegistration);
+              addHiddenField('vehicleMake', newData.vehicleMake || '');
+              addHiddenField('vehicleModel', newData.vehicleModel || '');
+              addHiddenField('vehicleYear', newData.vehicleYear || '');
+              addHiddenField('selectedServices', newData.query); // Use the query field for services
+              addHiddenField('totalPrice', '0'); // No price calculation in chatbot
+              addHiddenField('notes', input || 'Inquiry from chat'); // Additional notes
+              
+              // Submit the form to the hidden iframe
+              formRef.current.submit();
+            }
           
           setIsTyping(false);
           setCurrentStep(8);
@@ -280,13 +306,13 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
             engineSize: '',
             query: '',
           });
-          addBotMessage(chatSteps[0].message, chatSteps[0].options);
+          addBotMessage("Great! Let's start fresh. " + chatSteps[0].message, chatSteps[0].options);
         } else {
-          addBotMessage("Thank you for chatting with us today! Feel free to come back if you have any more questions. Have a great day!");
+          addBotMessage("Thank you for chatting with me today! Our team will be in touch with you shortly on the phone number you provided. Have a wonderful day!");
           // Close chat after a delay
           setTimeout(() => {
-            setIsOpen(false);
-          }, 3000);
+            onClose();
+          }, 5000);
         }
         break;
       
@@ -311,8 +337,8 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
   };
 
   const isValidRegistration = (reg: string) => {
-    // Basic UK registration format check
-    return /^[A-Z0-9]{2,4}\s?[A-Z0-9]{3}$/i.test(reg);
+    // Use the same validation function as the service estimator
+    return isValidUKRegistration(reg);
   };
 
   // Fetch vehicle data from DVSA API
@@ -333,21 +359,32 @@ const ChatBot: React.FC<ChatBotProps> = ({ onClose }) => {
   const resetChat = () => {
     setMessages([]);
     setCurrentStep(0);
+    setCustomerData({
+      name: '',
+      email: '',
+      phone: '',
+      carRegistration: '',
+      vehicleMake: '',
+      vehicleModel: '',
+      vehicleYear: '',
+      engineSize: '',
+      query: '',
+    });
   };
   
-  // Initialize chat when component mounts
-  useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      addBotMessage(chatSteps[0].message, chatSteps[0].options);
-    }
-  }, []);
+  // Chat is initialized in the useEffect when component mounts
 
   return (
     <>
+      {/* Hidden iframe to prevent page redirect */}
+      <iframe name="hidden-iframe" style={{display: 'none'}} ref={iframeRef}></iframe>
+      
+      {/* Hidden form for submissions */}
+      <form ref={formRef} style={{display: 'none'}}></form>
 
       {/* Chat window */}
       <AnimatePresence>
-        {isOpen && (
+        {(
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

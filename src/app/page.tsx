@@ -1,6 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaArrowRight } from 'react-icons/fa';
@@ -77,132 +76,205 @@ export default function Home() {
   }, [autoScrollEnabled]);
   return (
     <main className="bg-black text-white font-heading">
-      {/* Hero Section */}
-      <section className="relative min-h-[100svh] flex flex-col items-center justify-between">
+      {/* Hero Section with Services at Bottom */}
+      <section className="relative min-h-[100svh] md:min-h-[90svh] flex flex-col items-center justify-between">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/logos/backgroundlogo2.jpg"
             alt="Car Workshop"
             fill
-            priority
             className="object-cover brightness-50 w-full h-full"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
-            style={{ objectPosition: 'center' }}
+            style={{ 
+              objectPosition: 'center 20%'
+            }}
           />
         </div>
-        <div className="container mx-auto relative z-10 text-white px-4 pt-28 sm:pt-36 md:pt-48 lg:pt-56 pb-16 flex items-center justify-center sm:justify-start">
-          <div className="max-w-3xl w-full text-center sm:text-left">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 uppercase italic">
-              <span className="text-white">CAR CARE</span>
-            </h1>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 sm:mb-6 uppercase italic">
-              <span style={{ color: '#fb9929' }}>REDEFINED</span>
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl max-w-2xl mb-6 sm:mb-8 text-gray-300 mx-auto sm:mx-0">
-              Professional car care services for your premium vehicle
-            </p>
-            <div className="flex flex-wrap gap-3 sm:gap-4 mb-10 sm:mb-16 justify-center sm:justify-start">
-              <Link href="/service-estimator" className="text-white px-8 py-3 font-medium transition-colors duration-200 flex items-center uppercase italic hover:bg-red-800" style={{ backgroundColor: '#c40b0b' }}>
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                </svg>
-                Get Service Estimate
-              </Link>
+        
+        <div className="container mx-auto relative z-10 text-white px-4 h-full flex items-center justify-center pt-[30vh] md:pt-[25vh]">
+          {/* Main Content - Vertical Middle */}
+          <div className="flex flex-col items-center w-full md:items-start mb-0 md:mb-0 -mt-16 md:mt-0">
+            <div className="text-center md:text-left md:max-w-3xl w-full">
+              <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold mb-2 uppercase italic">
+                <span className="text-white italic">CAR CARE</span>
+              </h1>
+              <h2 className="text-5xl sm:text-6xl md:text-6xl font-bold mb-4 sm:mb-6 uppercase italic" style={{ color: '#fb9929' }}>
+                REDEFINED
+              </h2>
+              <div className="mt-6 text-center md:text-left">
+                <Link href="/service-estimator" className="inline-block bg-red-600 text-white px-6 py-3 text-base font-medium uppercase italic">
+                  CALL US FOR AN ESTIMATE
+                </Link>
+              </div>
             </div>
-            
-            {/* Service Categories Slider */}
-            <div className="relative z-10 overflow-hidden w-full py-12 mt-4">
-              {/* Desktop view - static grid for larger screens */}
-              <div className="hidden lg:block w-full">
-                <div className="container mx-auto px-4">
-                  <div className="grid grid-cols-3 gap-12 max-w-6xl mx-auto">
-                    {/* Engine Repair & Rebuilds */}
-                    <div className="text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">ENGINE REPAIR & REBUILDS</h3>
-                      <p className="text-gray-300 text-sm">
-                        Rebuild your engine with The Car Edition. Our experts are proficient in European, American and Japanese brands.
-                      </p>
-                    </div>
-
-                    {/* Maintenance & Servicing */}
-                    <div className="text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">MAINTENANCE & SERVICING</h3>
-                      <p className="text-gray-300 text-sm">
-                        Whether you need oil change services, major service or even a general service, The Car Edition got you covered.
-                      </p>
-                    </div>
-
-                    {/* Buy or Sell Your Car */}
-                    <div className="text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">BUY OR SELL YOUR CAR</h3>
-                      <p className="text-gray-300 text-sm">
-                        Looking to buy your dream car or simply want to sell yours? Look no further - we can do both!
-                      </p>
-                    </div>
-                  </div>
+          </div>
+        </div>
+        
+        {/* Service Categories at Bottom - Absolute Positioning */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 pb-4 md:pb-16 overflow-hidden">
+          {/* Desktop view container */}  
+          <div className="container mx-auto px-4">
+            {/* Desktop view - grid */}
+            <div className="hidden md:grid md:grid-cols-3 md:gap-6">
+              {/* ENGINE REPAIR & REBUILDS */}
+              <div className="flex items-start">
+                <div className="mr-4">
+                  <Image
+                    src="/images/icons/SERVICE ICON white.png"
+                    alt="Engine Repair Icon"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white uppercase mb-1 italic">ENGINE REPAIR & REBUILDS</h3>
+                  <p className="text-gray-300 text-xs italic">
+                    Rebuild your engine with The Car Edition.<br/>
+                    Our experts are proficient in European,<br/>
+                    American and Japanese brands.
+                  </p>
                 </div>
               </div>
               
-              {/* Mobile view - marquee for smaller screens */}
-              <div className="lg:hidden w-full">
-                <div className="marquee-container w-full mx-auto" style={{ overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                  <div className="marquee-content" style={{ display: 'inline-block', animation: 'marquee 30s linear infinite' }}>
-                    {/* Engine Repair & Rebuilds */}
-                    <div className="inline-block mx-8 w-72 text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">ENGINE REPAIR & REBUILDS</h3>
-                      <p className="text-gray-300 text-sm whitespace-normal">
-                        Rebuild your engine with The Car Edition. Our experts are proficient in European, American and Japanese brands.
-                      </p>
-                    </div>
-
-                    {/* Maintenance & Servicing */}
-                    <div className="inline-block mx-8 w-72 text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">MAINTENANCE & SERVICING</h3>
-                      <p className="text-gray-300 text-sm whitespace-normal">
-                        Whether you need oil change services, major service or even a general service, The Car Edition got you covered.
-                      </p>
-                    </div>
-
-                    {/* Buy or Sell Your Car */}
-                    <div className="inline-block mx-8 w-72 text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">BUY OR SELL YOUR CAR</h3>
-                      <p className="text-gray-300 text-sm whitespace-normal">
-                        Looking to buy your dream car or simply want to sell yours? Look no further - we can do both!
-                      </p>
-                    </div>
-                    
-                    {/* Duplicate for continuous scrolling */}
-                    {/* Engine Repair & Rebuilds */}
-                    <div className="inline-block mx-8 w-72 text-center">
-                      <svg className="w-12 h-12 text-white mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                      </svg>
-                      <h3 className="text-xl font-bold text-white uppercase mb-4">ENGINE REPAIR & REBUILDS</h3>
-                      <p className="text-gray-300 text-sm whitespace-normal">
-                        Rebuild your engine with The Car Edition. Our experts are proficient in European, American and Japanese brands.
-                      </p>
-                    </div>
+              {/* MAINTENANCE & SERVICING */}
+              <div className="flex items-start">
+                <div className="mr-4">
+                  <Image
+                    src="/images/icons/SERVICE ICON white.png"
+                    alt="Maintenance Icon"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white uppercase mb-1 italic">MAINTENANCE & SERVICING</h3>
+                  <p className="text-gray-300 text-xs italic">
+                    Whether you need oil change services,<br/>
+                    major service or even a general service,<br/>
+                    The Car Edition got you covered.
+                  </p>
+                </div>
+              </div>
+              
+              {/* BUY OR SELL YOUR CAR */}
+              <div className="flex items-start">
+                <div className="mr-4">
+                  <Image
+                    src="/images/icons/CAR_3.png"
+                    alt="Buy Sell Icon"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white uppercase mb-1 italic">BUY OR SELL YOUR CAR</h3>
+                  <p className="text-gray-300 text-xs italic">
+                    Looking to buy your dream car<br/>
+                    or simply want to sell yours?<br/>
+                    Look no further - we can do both!
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Mobile view - auto-scrolling marquee */}
+            <div className="md:hidden overflow-hidden">
+              <div className="flex whitespace-nowrap animate-marquee">
+                <style jsx>{`
+                  @keyframes marquee {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-200%); }
+                  }
+                  .animate-marquee {
+                    animation: marquee 20s linear infinite;
+                    min-width: 100%;
+                  }
+                `}</style>
+                
+                {/* First set of service items */}
+                <div className="inline-flex items-start mx-4">
+                  <div className="mr-4">
+                    <Image
+                      src="/images/icons/SERVICE ICON white.png"
+                      alt="Service Icon"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white uppercase mb-1 italic">ENGINE REPAIR & REBUILDS</h3>
+                    <p className="text-gray-300 text-xs italic">
+                      Rebuild your engine with The Car Edition.<br/>
+                      Our experts are proficient in European,<br/>
+                      American and Japanese brands.
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Second set of service items */}
+                <div className="inline-flex items-start mx-4">
+                  <div className="mr-4">
+                    <Image
+                      src="/images/icons/SERVICE ICON white.png"
+                      alt="Maintenance Icon"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white uppercase mb-1 italic">MAINTENANCE & SERVICING</h3>
+                    <p className="text-gray-300 text-xs italic">
+                      Whether you need oil change services,<br/>
+                      major service or even a general service,<br/>
+                      The Car Edition got you covered.
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Third set of service items */}
+                <div className="inline-flex items-start mx-4">
+                  <div className="mr-4">
+                    <Image
+                      src="/images/icons/CAR_3.png"
+                      alt="Buy Sell Icon"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white uppercase mb-1 italic">BUY OR SELL YOUR CAR</h3>
+                    <p className="text-gray-300 text-xs italic">
+                      Looking to buy your dream car<br/>
+                      or simply want to sell yours?<br/>
+                      Look no further - we can do both!
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Duplicate first set for continuous scrolling */}
+                <div className="inline-flex items-start mx-4">
+                  <div className="mr-4">
+                    <Image
+                      src="/images/icons/SERVICE ICON white.png"
+                      alt="Service Icon"
+                      width={32}
+                      height={32}
+                      className="w-8 h-8"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white uppercase mb-1 italic">ENGINE REPAIR & REBUILDS</h3>
+                    <p className="text-gray-300 text-xs italic">
+                      Rebuild your engine with The Car Edition.<br/>
+                      Our experts are proficient in European,<br/>
+                      American and Japanese brands.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -974,77 +1046,45 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Schedule an Appointment Section */}
-      <section className="relative overflow-hidden bg-white py-16">
-        {/* Top corner shape */}
-        <div className="absolute top-0 left-0 w-full h-24">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-0 w-full h-full">
-            <path d="M0 0L1440 0V60C1440 93.1371 1413.14 120 1380 120H60C26.8629 120 0 93.1371 0 60V0Z" fill="#030712" />
-          </svg>
+      {/* New Appointment Section with Background Image */}
+      <section className="relative overflow-hidden py-24">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/logos/youtube_logo.jpg"
+            alt="Background"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
         
-        {/* Clean white background */}
-        <div className="absolute inset-0 bg-white pointer-events-none">
-        </div>
+        {/* Shadow Overlay for better text readability - only on left side */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent z-5"></div>
         
-        <div className="container mx-auto px-4 pt-24 pb-16 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-            {/* Text content */}
-            <div className="lg:w-1/2 z-10">
-              <div className="mb-6">
-                <span className="inline-block text-red-600 font-semibold tracking-wider uppercase text-sm mb-2">VISIT US</span>
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 uppercase leading-tight mb-4">SCHEDULE AN <br />APPOINTMENT TODAY</h2>
-                <p className="text-gray-700 mb-8">
-                  At The Car Edition in Huntingdon, our mechanical repair service is all about keeping your car's engine ticking happily.
-                </p>
-                <Link href="/service-estimator" className="inline-block bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-4 rounded-sm transition-colors duration-300 uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                  Schedule an Appointment
-                </Link>
-              </div>
-            </div>
-            
-            {/* 3D Car Image with enhanced effects */}
-            <div className="lg:w-1/2 relative perspective-[1000px] z-20">
-              {/* Clean space for car */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] h-[70%] rotate-y-[-5deg] z-0"></div>
-              
-              {/* Car image with 3D transforms */}
-              <div className="relative w-full h-[450px] transform translate-z-32 rotate-y-[5deg] scale-110 hover:scale-115 transition-transform duration-700">
-                <div className="absolute inset-0 transform translate-y-[-20px] translate-x-[30px]">
-                  <Image
-                    src="/images/services/appointmentimage.jpg"
-                    alt="3D Car"
-                    fill
-                    className="object-contain drop-shadow-[0_35px_35px_rgba(0,0,0,0.4)]"
-                    style={{
-                      filter: 'drop-shadow(0 30px 20px rgba(0,0,0,0.3))',
-                      transform: 'translateZ(100px)'
-                    }}
-                  />
-                </div>
-              </div>
-              
-              {/* Multiple layered shadows for depth */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[85%] h-8 bg-black/15 rounded-full blur-xl z-0"></div>
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[70%] h-4 bg-black/20 rounded-full blur-lg z-0"></div>
-              
-              {/* Reflection effect */}
-              <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 w-[80%] h-[20px] bg-gradient-to-b from-white/30 to-transparent rounded-full blur-sm"></div>
-              
-              {/* Clean space without pop-out indicators */}
-              <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-              </div>
-            </div>
+        {/* Content Container */}
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-2xl ml-0 md:ml-12 lg:ml-24 text-left">
+            <span className="inline-block text-red-600 font-semibold tracking-wider uppercase text-sm mb-2">VISIT US</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white uppercase leading-tight mb-6">SCHEDULE AN <br />APPOINTMENT TODAY</h2>
+            <p className="text-gray-300 mb-8 max-w-lg">
+              At The Car Edition in Huntingdon, our mechanical repair service is all about keeping your car's engine running smoothly. Book your appointment today.
+            </p>
+            <Link href="/service-estimator" className="inline-block bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-4 rounded-sm transition-colors duration-300 uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              BOOK AN APPOINTMENT
+            </Link>
           </div>
         </div>
         
-        {/* Bottom corner shape */}
-        <div className="absolute bottom-0 left-0 w-full h-24">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 left-0 w-full h-full transform rotate-180">
-            <path d="M0 0L1440 0V60C1440 93.1371 1413.14 120 1380 120H60C26.8629 120 0 93.1371 0 60V0Z" fill="#030712" />
+        {/* Angled Cut at Bottom Right - matching reference image */}
+        <div className="absolute bottom-0 right-0 w-full overflow-hidden z-10">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 right-0 w-full h-full">
+            <path d="M0 120L1440 120L1440 0L1080 0L0 120Z" fill="white" />
           </svg>
         </div>
       </section>
+
+
 
       {/* Testimonials Section */}
       <TestimonialsCarousel limit={6} autoplaySpeed={6000} />
