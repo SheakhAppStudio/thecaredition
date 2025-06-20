@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { FaWhatsapp, FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { HiMenu } from 'react-icons/hi';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -103,7 +104,8 @@ export default function Header() {
   const closeMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(false);
   }, []);
-
+const pathname = usePathname()
+if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathname.includes("/signup")){
   return (
     <header 
       ref={headerRef}
@@ -117,7 +119,7 @@ export default function Header() {
           : '-translate-y-full'
       } text-white`}
     >
-      <div className="container mx-auto px-4">
+      <div className=" mx-auto lg:px-28 px-5">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
@@ -127,17 +129,18 @@ export default function Header() {
                 alt="Car Edition Pro Logo" 
                 width={140} 
                 height={40} 
-                className="transition-transform group-hover:scale-105 brightness-0 invert"
+                
+                className="transition-transform group-hover:scale-105 brightness-0 invert w-28 h-20"
               />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <a href="https://thecaredition.shop/password" target="_blank" rel="noopener noreferrer" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
+          <nav className="hidden lg:flex items-center space-x-6 lg:space-x-8">
+            <Link href="/shop"  rel="noopener noreferrer" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
               Shop
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
             <Link href="/services" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
               Services
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
@@ -148,6 +151,10 @@ export default function Header() {
             </Link>
             <Link href="/videos" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
               Videos
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link href="/blogs" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
+              Blogs
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
             </Link>
 
@@ -173,7 +180,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <button
             ref={menuButtonRef}
-            className="md:hidden p-2 focus:outline-none rounded-md z-[101] transition-colors relative"
+            className="lg:hidden p-2 focus:outline-none rounded-md z-[101] transition-colors relative"
             onClick={toggleMobileMenu}
             aria-label="Toggle mobile menu"
             aria-expanded={isMobileMenuOpen}
@@ -218,16 +225,15 @@ export default function Header() {
           {/* Mobile Menu Content */}
           <div className="px-6 py-8">
             <nav className="flex flex-col space-y-5">
-              <a 
-                href="https://thecaredition.shop/password" 
-                target="_blank"
+              <Link 
+                href="/shop" 
                 rel="noopener noreferrer"
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
                 onClick={closeMobileMenu}
               >
                 <span>Shop</span>
                 <span className="text-[#f56e13]">→</span>
-              </a>
+              </Link>
               <Link 
                 href="/services" 
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
@@ -250,6 +256,14 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 <span>Videos</span>
+                <span className="text-[#f56e13]">→</span>
+              </Link>
+              <Link 
+                href="/blogs" 
+                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
+                onClick={closeMobileMenu}
+              >
+                <span>Blogs</span>
                 <span className="text-[#f56e13]">→</span>
               </Link>
 
@@ -302,4 +316,6 @@ export default function Header() {
       </div>
     </header>
   );
+}
+  
 }

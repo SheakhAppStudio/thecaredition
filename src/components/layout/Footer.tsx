@@ -1,8 +1,11 @@
-
+"use client"
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
-  return (
+  const pathname = usePathname();
+  if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathname.includes("/signup")){
+     return (
     <footer className="bg-black text-white py-12 font-heading">
       <div className="container mx-auto px-4">
         {/* Logo and social media */}
@@ -81,4 +84,6 @@ export default function Footer() {
       </div>
     </footer>
   );
+  }
+ 
 }

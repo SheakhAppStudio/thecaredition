@@ -2,11 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect, useRef } from 'react';
-import { FaCarSide, FaTools, FaOilCan, FaCogs, FaWrench, FaUserCog } from 'react-icons/fa';
-import { MdElectricCar, MdOutlineCleaningServices } from 'react-icons/md';
-import { BsStarFill } from 'react-icons/bs';
+
 
 // These components aren't needed or don't exist in the project
 import VideoPlayer from '@/components/VideoPlayer';
@@ -75,10 +72,10 @@ export default function Home() {
     return () => clearInterval(servicesInterval);
   }, [autoScrollEnabled]);
   return (
-    <main className="bg-black text-white font-heading">
+    <main className="  text-white font-heading bg-black">
       {/* Hero Section with Services at Bottom */}
-      <section className="relative min-h-[100svh] md:min-h-[90svh] flex flex-col items-center justify-between">
-        <div className="absolute inset-0 z-0">
+      <section className="relative min-h-[100vh] md:min-h-[90vh] flex flex-col px-28 lg:items-start items-center justify-start ">
+        <div >
           <Image
             src="/images/logos/backgroundlogo2.jpg"
             alt="Car Workshop"
@@ -91,9 +88,9 @@ export default function Home() {
           />
         </div>
         
-        <div className="container mx-auto relative z-10 text-white px-4 h-full flex items-center justify-center pt-[30vh] md:pt-[25vh]">
+        <div className=" relative z-10 text-white px-4 h-full flex justify-start pt-[45vh] md:pt-[25vh] ">
           {/* Main Content - Vertical Middle */}
-          <div className="flex flex-col items-center w-full md:items-start mb-0 md:mb-0 -mt-16 md:mt-0">
+          <div className="flex flex-col items-center justify-center lg:justify-start w-full md:items-start mb-0 md:mb-0 -mt-16 md:mt-0">
             <div className="text-center md:text-left md:max-w-3xl w-full">
               <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold mb-2 uppercase italic">
                 <span className="text-white italic">CAR CARE</span>
@@ -111,11 +108,11 @@ export default function Home() {
         </div>
         
         {/* Service Categories at Bottom - Absolute Positioning */}
-        <div className="absolute bottom-0 left-0 right-0 z-10 pb-4 md:pb-16 overflow-hidden">
+        <div className="absolute bottom-0 left-0 right-0 z-10 pb-4 md:pb-16 overflow-hidden ">
           {/* Desktop view container */}  
-          <div className="container mx-auto px-4">
+          <div className=" px-28 ">
             {/* Desktop view - grid */}
-            <div className="hidden md:grid md:grid-cols-3 md:gap-6">
+            <div className="hidden md:grid md:grid-cols-3  justify-between">
               {/* ENGINE REPAIR & REBUILDS */}
               <div className="flex items-start">
                 <div className="mr-4">
@@ -138,7 +135,7 @@ export default function Home() {
               </div>
               
               {/* MAINTENANCE & SERVICING */}
-              <div className="flex items-start">
+              <div className="flex items-start justify-center">
                 <div className="mr-4">
                   <Image
                     src="/images/icons/SERVICE ICON white.png"
@@ -159,7 +156,7 @@ export default function Home() {
               </div>
               
               {/* BUY OR SELL YOUR CAR */}
-              <div className="flex items-start">
+              <div className="flex items-start justify-end">
                 <div className="mr-4">
                   <Image
                     src="/images/icons/CAR_3.png"
@@ -284,8 +281,8 @@ export default function Home() {
       </section>
 
       {/* 10% Off Banner */}
-      <section style={{ backgroundColor: '#f56e13', padding: '1.25rem 0', position: 'relative', marginTop: '100px' }}>
-        <div className="container mx-auto px-4">
+      <section style={{ backgroundColor: '#f56e13', padding: '1.25rem 0', position: 'relative'}}>
+        <div className="container mx-auto px-4 text-xs lg:text-base">
           <p style={{ color: 'white', textAlign: 'center', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'var(--font-poppins)', margin: '0' }}>
             GET 10% OFF YOUR FIRST SERVICE + FREE BRAKE FLUID TOP UP WHEN YOU SIGN UP TO OUR REWARDS PROGRAM!
           </p>
@@ -293,7 +290,7 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="py-16 mt-6 bg-black" style={{backgroundImage: 'url(/images/logos/background-1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative'}}>
+      <section className="py-16  bg-black" style={{backgroundImage: 'url(/images/logos/background-1.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative'}}>
         <div className="absolute inset-0 bg-black/70"></div>
         <div className="absolute inset-0 shadow-[inset_0_0_100px_rgba(255,255,255,0.1)]"></div>
         <div className="container mx-auto px-4 relative z-10">

@@ -5,22 +5,34 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaYoutube, FaPlay, FaCalendarAlt, FaEye } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { getYouTubeVideos, YouTubeVideo } from '@/services/youtubeService';
+import axios from 'axios';
+import { HeroVideoDialog } from '@/components/magicui/hero-video-dialog';
+
+interface YouTubeVideo {
+  _id: string;
+  title: string;
+  createdAt: string;
+  videoYoutubeLink: string;
+  videoThumbnail: string;
+  videoEmbedLink: string;
+  description: string;
+}
 
 export default function VideosPage() {
   const [videos, setVideos] = useState<YouTubeVideo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchVideos = async () => {
       setLoading(true);
       try {
-        const fetchedVideos = await getYouTubeVideos(9);
-        setVideos(fetchedVideos);
+        const response = await axios.get("/api/videos");
+        setVideos(response.data);
         setError(null);
       } catch (err) {
-        console.error('Error fetching YouTube videos:', err);
+        console.error('Error fetching videos:', err);
         setError('Failed to load videos. Please try again later.');
       } finally {
         setLoading(false);
@@ -31,7 +43,11 @@ export default function VideosPage() {
   }, []);
 
   const openVideo = (videoUrl: string) => {
-    window.open(videoUrl, '_blank', 'noopener,noreferrer');
+    setSelectedVideo(videoUrl);
+  };
+
+  const closeVideo = () => {
+    setSelectedVideo(null);
   };
 
   const formatDate = (dateString: string) => {
@@ -104,49 +120,42 @@ export default function VideosPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {videos.map((video, index) => (
               <motion.div 
-                key={video.id}
+                key={video._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="bg-gray-900/80 backdrop-blur-sm overflow-hidden shadow-lg hover:shadow-[#fb9929]/20 transition-all duration-300 transform hover:-translate-y-2 border border-gray-800"
               >
-                <div className="relative">
-                  <div className="aspect-w-16 aspect-h-9 relative">
-                    <Image 
-                      src={video.thumbnail} 
-                      alt={video.title}
-                      width={640}
-                      height={360}
-                      className="object-cover w-full"
-                    />
-                  </div>
-                  
-                  <button 
-                    onClick={() => openVideo(video.videoUrl)}
-                    className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition-opacity duration-300"
-                    aria-label="Play video"
-                  >
-                    <div className="bg-red-600 rounded-full p-4 transform transition-transform duration-300 hover:scale-110">
-                      <FaPlay className="text-white text-xl" />
-                    </div>
-                  </button>
-                </div>
+               <div className="relative group cursor-pointer" onClick={() => openVideo(video.videoEmbedLink)}>
+  <Image
+    src={video.videoThumbnail}
+    alt={video.title}
+    width={640}
+    height={360}
+    className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
+  />
+  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <FaPlay className="text-white text-4xl" />
+  </div>
+</div>
+
                 
                 <div className="p-6">
                   <h3 className="text-xl font-semibold mb-2 line-clamp-2 font-heading text-white italic">{video.title}</h3>
                   <div className="flex items-center text-gray-400 text-sm mb-4">
                     <FaCalendarAlt className="mr-2 text-[#fb9929]" />
-                    <span>{formatDate(video.publishedAt)}</span>
+                    <span>{formatDate(video.createdAt)}</span>
                   </div>
                   <p className="text-gray-300 line-clamp-3 font-lato">{video.description}</p>
                   
-                  <button
-                    onClick={() => openVideo(video.videoUrl)}
-                    className="mt-4 text-[#fb9929] hover:text-white font-medium flex items-center transition-colors duration-200 italic"
+                  <a
+                    href={video?.videoYoutubeLink}
+                    className="mt-4 text-[#fb9929] hover:text-white font-medium flex items-center transition-colors duration-200 italic cursor-pointer"
+                    target='_blank'
                   >
                     <FaEye className="mr-2" />
                     Watch Video
-                  </button>
+                  </a>
                 </div>
               </motion.div>
             ))}
@@ -181,6 +190,32 @@ export default function VideosPage() {
           </Link>
         </div>
       </div>
+
+      {/* Video Dialog */}
+      {selectedVideo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl mx-4">
+            <button
+              onClick={closeVideo}
+              className="absolute -top-12 right-0 z-10 text-white hover:text-[#fb9929] transition-colors"
+              aria-label="Close video"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="aspect-w-16 aspect-h-9">
+              <iframe
+                src={`${selectedVideo}?autoplay=1`}
+                className="w-full h-full aspect-video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Video player"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
