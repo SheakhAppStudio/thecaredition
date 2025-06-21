@@ -158,7 +158,7 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
             </Link>
 
-            <Link href="/about" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
+            <Link href="/about-us" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
               About Us
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
             </Link>
@@ -266,9 +266,8 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
                 <span>Blogs</span>
                 <span className="text-[#f56e13]">→</span>
               </Link>
-
               <Link 
-                href="/about" 
+                href="/about-us" 
                 className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
                 onClick={closeMobileMenu}
               >
