@@ -9,7 +9,7 @@ export async function POST(req :NextRequest) {
 
   try {
     const formInfo = await req.json();
-    const result = await servicesCollection.insertOne({ ...formInfo, isCertified:"student", createdAt : new Date() });
+    const result = await servicesCollection.insertOne({ ...formInfo,  createdAt : new Date() });
     return NextResponse.json(result, { status: 201 }); 
   } catch (error) {
     console.error(error);

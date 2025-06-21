@@ -88,7 +88,8 @@ export async function GET(req: NextRequest) {
         query.$or = [
           { "customer.name": { $regex: searchRegex } },
           { "customer.email": { $regex: searchRegex } },
-          { "customer.phone": { $regex: searchRegex } }
+          { "customer.phone": { $regex: searchRegex } },
+          { "vehicle.registrationNumber": { $regex: searchRegex } }
         ];
       }
     }
@@ -106,6 +107,7 @@ export async function GET(req: NextRequest) {
             "customer.name": 1,
             "customer.email": 1,
             "customer.phone": 1,
+            "vehicle.registrationNumber": 1,
             status: 1,
             createdAt: 1
           }
@@ -113,18 +115,35 @@ export async function GET(req: NextRequest) {
       ]).toArray()
     ]);
 
-    // Deduplicate customers
-    const uniqueCustomers = Array.from(
-      new Map(
-        bookings.map(booking => [
-          `${booking.customer.name}-${booking.customer.email}-${booking.customer.phone}`,
-          booking.customer
-        ])
-      ).values()
-    );
+    // Group by customer and collect all vehicle registration numbers
+    const customerMap = new Map();
+    
+    bookings.forEach(booking => {
+      const key = `${booking.customer.name}-${booking.customer.email}-${booking.customer.phone}`;
+      
+      if (!customerMap.has(key)) {
+        customerMap.set(key, {
+          name: booking.customer.name,
+          email: booking.customer.email,
+          phone: booking.customer.phone,
+          vehicles: new Set()
+        });
+      }
+      
+      // Add vehicle registration number if it exists
+      if (booking.vehicle?.registrationNumber) {
+        customerMap.get(key).vehicles.add(booking.vehicle.registrationNumber);
+      }
+    });
+
+    // Convert Set to array for each customer
+    const customersWithVehicles = Array.from(customerMap.values()).map(customer => ({
+      ...customer,
+      vehicles: Array.from(customer.vehicles)
+    }));
 
     return NextResponse.json({
-      data: uniqueCustomers,
+      data: customersWithVehicles,
       pagination: {
         page,
         limit,

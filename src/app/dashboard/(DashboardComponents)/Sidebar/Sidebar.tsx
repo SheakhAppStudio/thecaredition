@@ -29,6 +29,14 @@ export function Sidebar() {
 
   const navSections = [
     {
+      title: "Services Management",
+      icon: <Users className="h-5 w-5 text-amber-500" />,
+      items: [
+        { href: "/dashboard/add-services", icon: <Users className="h-4 w-4" />, name: "Add Service" },
+        { href: "/dashboard/services-list", icon: <Users className="h-4 w-4" />, name: "Services List" },
+      ]
+    },
+    {
       title: "Customers Management",
       icon: <Users className="h-5 w-5 text-amber-500" />,
       items: [

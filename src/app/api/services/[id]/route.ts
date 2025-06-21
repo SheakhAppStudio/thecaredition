@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 // Define interfaces for your collections
-interface Admission extends Document {
+interface services extends Document {
   _id: ObjectId;
   studentPhoto?: string;
   studentName: string;
@@ -18,23 +18,26 @@ interface Admission extends Document {
 
 
 // Connect collections with types
-const admissionCollection = dbConnect<Admission>(collections.services);
+const servicesCollection = dbConnect<services>(collections.services);
 
 
-// GET — fetch admission by ID with related data
+// GET — fetch services by ID with related data
 export async function GET(req: NextRequest) {
 
   try {
-    const id = req.nextUrl.pathname.split("/").pop();
-
+      const id = req.nextUrl.pathname.split("/").pop();
+  
+    const video = await servicesCollection.findOne({ _id: new ObjectId(id) });
   
   
-
-
-  } catch (error) {
-    console.error("Error fetching admission with related data:", error);
+      return NextResponse.json(video, { status: 200 });
+    
+  
+  
+    }  catch (error) {
+    console.error("Error fetching services with related data:", error);
     return NextResponse.json(
-      { error: "Failed to fetch admission with related data" }, 
+      { error: "Failed to fetch services with related data" }, 
       { status: 500 }
     );
   }
@@ -52,61 +55,27 @@ export async function PATCH(req: NextRequest) {
 
     const filter = { _id: new ObjectId(id) };
     const update = await req.json();
-    const admission = await admissionCollection.findOne(filter);
+    const services = await servicesCollection.findOne(filter);
 
-    if (!admission) {
-      return NextResponse.json({ error: "Insittue not found" }, { status: 404 });
+    if (!services) {
+      return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
     const updateDoc = {
       $set: {
-          studentPhoto: update.studentPhoto, // "name"
-          studentName: update.studentName, // "fathersOrHusbandName" mapped to "fatherName"
-          fathersOrHusbandName: update.fathersOrHusbandName, // "maritalStatus" mapped to "marital"
-          motherName: update.motherName, // "nationalId"
-          presentAddress: update.presentAddress, // "mobile" mapped to "telPersonal"
-          permanentAddress: update.permanentAddress, // "studentSchool" mapped to "permanentAddress" (adjust if needed)
-          dateOfBirth: update.dateOfBirth, // "studentSchoolRoll" mapped to "admissionName" (adjust if needed)
-          gender: update.gender, // "service" mapped to "catgOrganization" (adjust if needed)
-          occupation: update.occupation, // "batch" mapped to "position" (adjust if needed)
-          bloodGroup: update.bloodGroup, // "guardiansMobile" mapped to "telOffice" (adjust if needed)
-          maritalStatus: update.maritalStatus, // "email"
-          email: update.email, // "url"
-          studentMobile: update.studentMobile, // "presentAddress" mapped to "address"
-          guardianMobile: update.guardianMobile, // "numberOfComputer"
-          highestEducationQualification: update.highestEducationQualification, // "date"
-          enrollDate: update.enrollDate, // "photoURL" mapped to "photo"
-          certificateType: update.certificateType, // "tradeLic"
-          courseName: update.courseName, // "photoURL" mapped to "profilePic"
-          batchName: update.batchName, // "institutionIcon"
-          rollNumber: update.rollNumber ,// "roleId"
-          sessionStart: update.sessionStart, // "roleId"
-          courseDuraton: update.courseDuraton, // "roleId"
-          courseFee: update.courseFee, // "roleId"
-          discount: update.discount, // "roleId"
-          payableAmount: update.payableAmount, // "roleId"
-          downPayment: update.downPayment, // "roleId"
-          downPaymentDate: update.downPaymentDate, // "roleId"
-          downPaymenttrxMode: update.downPaymenttrxMode, // "roleId"
-          downPaymentTrxNo: update.downPaymentTrxNo, // "roleId"
-          firstInstallment: update.firstInstallment, // "roleId"
-          firstInstallmentDate: update.firstInstallmentDate, // "roleId"
-          secondInstallment: update.secondInstallment, // "roleId"
-          secondInstallmentDate: update.secondInstallmentDate, // "roleId"
-          completedCourseDate: update.completedCourseDate, // "roleId"
-          issueDate: update.issueDate, // "roleId"
-          referenceMobile: update.referenceMobile, // "roleId"
-          reference: update.reference, // "roleId"
-          referenceAddress: update.referenceAddress, // "roleId"
-          activeStatus: update.activeStatus, // "roleId"
+          name: update.name, // "name"
+          description: update.description, // "fathersOrHusbandName" mapped to "fatherName"
+          basePrice: update.basePrice, // "maritalStatus" mapped to "marital"
+
+     
       }
     };
 
-    const result = await admissionCollection.updateOne(filter, updateDoc);
-    return NextResponse.json({ message: "admission updated successfully", result }, { status: 200 });
+    const result = await servicesCollection.updateOne(filter, updateDoc);
+    return NextResponse.json({ message: "services updated successfully", result }, { status: 200 });
   } catch (error) {
-    console.error("Error updating admission:", error);
-    return NextResponse.json({ error: "Failed to update admission" }, { status: 500 });
+    console.error("Error updating services:", error);
+    return NextResponse.json({ error: "Failed to update services" }, { status: 500 });
   }
 }
 
@@ -123,17 +92,15 @@ export async function DELETE(req: NextRequest) {
     const filter = { _id: new ObjectId(id) };
  
 
-    const result = await admissionCollection.updateOne(filter , {$set : {
-      activeStatus : "deleted"
-    }});
+    const result = await servicesCollection.deleteOne(filter );
 
-    if (result.modifiedCount > 0) {
-      return NextResponse.json({ message: "admission marked as deleted" }, { status: 200 });
+    if (result.deletedCount > 0) {
+      return NextResponse.json(result);
     } else {
-      return NextResponse.json({ error: "admission not found or already deleted" }, { status: 404 });
+      return NextResponse.json({ error: "services not found or already deleted" }, { status: 404 });
     }
   } catch (error) {
-    console.error("Error deleting admission:", error);
-    return NextResponse.json({ error: "An error occurred while deleting the admission." }, { status: 500 });
+    console.error("Error deleting services:", error);
+    return NextResponse.json({ error: "An error occurred while deleting the services." }, { status: 500 });
   }
 }

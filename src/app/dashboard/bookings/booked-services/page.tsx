@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { toast } from 'react-toastify';
 import { 
@@ -37,6 +37,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PrinterIcon } from 'lucide-react';
 
 interface BookingData {
   _id: string;
@@ -75,7 +76,7 @@ export default function NewBookingsPage() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [isUpdating, setIsUpdating] = useState(false);
-  
+    const printWindowRef = useRef<Window | null>(null);
   const { 
     data: bookings = { data: [], pagination: { total: 0, totalPages: 0 } }, 
     isLoading, 
@@ -147,7 +148,132 @@ export default function NewBookingsPage() {
       console.error('API Error:', error);
     }
   }, [error]);
+  const handlePrint = (booking: BookingData) => {
+    // Close any existing print window
+    if (printWindowRef.current) {
+      printWindowRef.current.close();
+    }
 
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    if (!printWindow) {
+      toast.error('Popup was blocked. Please allow popups for this site.');
+      return;
+    }
+
+    printWindowRef.current = printWindow;
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Service Receipt - ${booking.vehicle.registrationNumber}</title>
+          <style>
+            @page { size: auto; margin: 5mm; }
+            body { font-family: Arial, sans-serif; margin: 20px; font-size: 14px; }
+            h1 { color: #333; text-align: center; margin: 10px 0; font-size: 22px; }
+            h2 { font-size: 18px; border-bottom: 1px solid #ddd; padding-bottom: 6px; margin-top: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; font-weight: bold; }
+            .header { text-align: center; margin-bottom: 20px; }
+            .business-name { font-size: 24px; font-weight: bold; color: #ea580c; margin-bottom: 5px; }
+            .receipt-title { font-size: 18px; margin: 10px 0; color: #333; }
+            .text-right { text-align: right; }
+            .text-center { text-align: center; }
+            .mt-4 { margin-top: 20px; }
+            .py-2 { padding-top: 10px; padding-bottom: 10px; }
+            .border-t { border-top: 1px solid #ddd; }
+            .total-row { font-weight: bold; font-size: 16px; }
+            .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #666; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="business-name">Car Edition Pro</div>
+            <div class="receipt-title">Service Receipt</div>
+            <div>Generated on ${new Date().toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}</div>
+          </div>
+          
+          <div>
+            <h2>Customer Information</h2>
+            <p><strong>${booking.customer.name}</strong></p>
+            <p>Phone: ${booking.customer.phone}</p>
+            <p>Email: ${booking.customer.email}</p>
+          </div>
+          
+          <div class="mt-4">
+            <h2>Vehicle Information</h2>
+            <p><strong>${booking.vehicle.make} ${booking.vehicle.model}</strong></p>
+            <p>Registration: ${booking.vehicle.registrationNumber}</p>
+          </div>
+          
+          <div class="mt-4">
+            <h2>Services</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th class="text-right">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${booking.services.map(service => `
+                  <tr>
+                    <td>${service.name}</td>
+                    <td class="text-right">£${service.basePrice.toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="mt-4 border-t py-2">
+            <table>
+              <tr class="total-row">
+                <td><strong>Total</strong></td>
+                <td class="text-right"><strong>£${booking.totalPrice.toFixed(2)}</strong></td>
+              </tr>
+            </table>
+          </div>
+          
+          <div class="mt-4">
+            <h2>Status</h2>
+            <p><strong>${booking.status}</strong></p>
+          </div>
+          
+          <div class="footer">
+            <p>Thank you for choosing Car Edition Pro</p>
+            <p>For any questions, please contact us at: contact@infinityauto.com</p>
+          </div>
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    
+    // Ensure the content is loaded before printing
+    printWindow.onload = () => {
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+        // Don't close immediately to allow print dialog to show
+      }, 500);
+    };
+  };
+
+  // Clean up print window when component unmounts
+  useEffect(() => {
+    return () => {
+      if (printWindowRef.current) {
+        printWindowRef.current.close();
+      }
+    };
+  }, []);
   return (
     <main>
       <Card className="mb-6 bg-gradient-to-r from-blue-50 to-orange-50">
@@ -321,6 +447,14 @@ export default function NewBookingsPage() {
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex gap-2 justify-end">
+                             <Button
+                                                      variant="outline"
+                                                      size="icon"
+                                                      className="text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700"
+                                                      onClick={() => handlePrint(booking)}
+                                                    >
+                                                      <PrinterIcon className="h-4 w-4" />
+                                                    </Button>
                           <Button
                             variant="outline"
                             size="icon"
