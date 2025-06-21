@@ -73,11 +73,14 @@ export function isValidUKRegistration(regNumber: string): boolean {
  */
 export async function getVehicleByRegistration(regNumber: string): Promise<VehicleDetails | null> {
   try {
-    // Clean up registration number (remove spaces, convert to uppercase)
-    const cleanRegNumber = regNumber.replace(/\s+/g, '').toUpperCase();
+      const cleanRegNumber = regNumber.replace(/\s+/g, '').toUpperCase();
     
-    // Make the API call to our vehicle lookup API route
-    const response = await fetch(API_URL, {
+    // Determine the base URL based on environment
+    const baseUrl = typeof window === 'undefined' 
+      ? process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'
+      : '';
+    
+    const response = await fetch(`${baseUrl}/api/vehicle-lookup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

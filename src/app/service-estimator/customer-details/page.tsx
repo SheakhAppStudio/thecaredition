@@ -133,7 +133,7 @@ export default function CustomerDetails() {
         })
          const res =   await axios.post('/api/bookings', {
           customer: { name, email, phone },
-          vehicle,
+          vehicle : vehicle?.registrationNumber,
           serviceIds: selectedServiceIds,
           otherService,
           totalPrice,

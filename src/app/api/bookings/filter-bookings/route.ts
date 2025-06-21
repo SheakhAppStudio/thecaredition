@@ -1,34 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collections, dbConnect } from "@/lib/dbConnect";
 import { authorizationCheck } from "@/lib/authorization";
+import { getVehicleByRegistration } from "@/services/vehicleApi";
+import { ObjectId } from "mongodb";
+// Define interfaces for your collections
+interface services extends Document {
+  _id: ObjectId;
+  name?: string;
+  description: string;
+  basePrice: string;
 
-interface Booking {
-  _id: string;
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-  vehicle: {
-    registrationNumber: string;
-    make: string;
-    model: string;
-  };
-  services: {
-    _id: string;
-    name: string;
-    basePrice: number;
-  }[];
-  totalPrice: number;
-  status: string;
-  createdAt: Date;
 }
 
 export async function GET(req: NextRequest) {
-    const referer = req.headers.get('referer') || '';
+  const referer = req.headers.get('referer') || '';
   const refererPath = new URL(referer).pathname;
   
-  // Pass referer path to authorization check
   const authResult = await authorizationCheck(refererPath);
   
   if (!authResult.success) {
@@ -37,6 +24,7 @@ export async function GET(req: NextRequest) {
       { status: authResult.status }
     );
   }
+
   try {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status") || "";
@@ -44,23 +32,20 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
 
-
     const bookingsCollection = dbConnect(collections.bookings);
-    const servicesCollection = dbConnect(collections.services);
+    const servicesCollection = dbConnect<services>(collections.services);
 
     // Build query
     const query: any = {};
     if (status) query.status = status;
 
     if (searchTerm) {
-      // Check if text index exists
       const indexes = await bookingsCollection.indexes();
       const hasTextIndex = indexes.some(index => index.name === "booking_search_text");
       
       if (hasTextIndex) {
         query.$text = { $search: searchTerm };
       } else {
-        // Fallback to regex if text index doesn't exist
         query.$or = [
           { "customer.name": { $regex: searchTerm, $options: "i" } },
           { "customer.email": { $regex: searchTerm, $options: "i" } },
@@ -72,51 +57,71 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Get total count (optimized)
+    // Get total count
     const totalPromise = bookingsCollection.countDocuments(query);
 
-    // Get paginated results with services lookup
+    // Get paginated results
     const bookingsPromise = bookingsCollection.aggregate([
       { $match: query },
       { $sort: { createdAt: -1 } },
       { $skip: (page - 1) * limit },
       { $limit: limit },
       {
-        $lookup: {
-          from: "services",
-          localField: "serviceIds",
-          foreignField: "_id",
-          as: "services"
-        }
-      },
-      {
         $project: {
-          "customer.name": 1,
-          "customer.email": 1,
-          "customer.phone": 1,
-          "vehicle.registrationNumber": 1,
-          "vehicle.make": 1,
-          "vehicle.model": 1,
-          "services.name": 1,
-          "services.basePrice": 1,
-          totalPrice: 1,
-          status: 1,
-          createdAt: 1
+          "customer": 1,
+          "vehicle": 1,
+          "serviceIds": 1,
+          "totalPrice": 1,
+          "status": 1,
+          "createdAt": 1
         }
       }
     ]).toArray();
 
     const [total, bookings] = await Promise.all([totalPromise, bookingsPromise]);
 
+    // Enhance bookings with vehicle data and services
+    const enhancedBookings = await Promise.all(
+      bookings.map(async (booking: any) => {
+        try {
+          // Get vehicle data
+          const cleanReg = booking?.vehicle?.replace(/\s+/g, '').toUpperCase().toString();
+          const vehicleData = await getVehicleByRegistration(cleanReg);
+
+          // Get services data
+          let services : services[] = [];
+          if (booking.serviceIds && booking.serviceIds.length > 0) {
+            const serviceIds = booking.serviceIds.map((id: string) => new ObjectId(id));
+            services = await servicesCollection.find({
+              _id: { $in: serviceIds }
+            }).toArray();
+          }
+
+          return {
+            ...booking,
+            _id: booking._id.toString(),
+            vehicle: {
+              ...vehicleData
+            },
+            services: services.map((service: any) => ({
+              ...service,
+              _id: service._id.toString()
+            }))
+          };
+        } catch (error) {
+          console.error(`Error enhancing booking ${booking._id}:`, error);
+          // Return basic booking data if enhancement fails
+          return {
+            ...booking,
+            _id: booking._id.toString(),
+            services: []
+          };
+        }
+      })
+    );
+
     return NextResponse.json({
-      data: bookings.map(booking => ({
-        ...booking,
-        _id: booking._id.toString(),
-        services: booking.services?.map((service: any) => ({
-          ...service,
-          _id: service._id.toString()
-        })) || []
-      })),
+      data: enhancedBookings,
       pagination: {
         page,
         limit,
@@ -133,4 +138,3 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-

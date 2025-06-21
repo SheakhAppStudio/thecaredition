@@ -7,8 +7,9 @@ import { NextRequest, NextResponse } from "next/server";
 // Define interfaces for your collections
 interface services extends Document {
   _id: ObjectId;
-  studentPhoto?: string;
-  studentName: string;
+  name?: string;
+  description: string;
+  basePrice: string;
 
 }
 
