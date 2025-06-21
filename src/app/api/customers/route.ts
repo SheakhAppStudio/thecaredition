@@ -1,4 +1,5 @@
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { authorizationCheck } from "@/lib/authorization";
+import { collections, dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -53,6 +54,18 @@ async function createIndexes() {
 createIndexes();
 
 export async function POST(req: NextRequest) {
+    const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const formInfo = await req.json();
     const result = await bookingsCollection.insertOne({ 
@@ -68,6 +81,18 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
+    const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const { searchParams } = new URL(req.url);
     const searchTerm = searchParams.get('search') || '';

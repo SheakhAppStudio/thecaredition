@@ -1,12 +1,24 @@
 
 
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { authorizationCheck } from "@/lib/authorization";
+import { collections, dbConnect } from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 
 const videosCollection = dbConnect(collections.videos);
 
 export async function POST(req :NextRequest) {
-
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const formInfo = await req.json();
     const result = await videosCollection.insertOne({ ...formInfo, createdAt : new Date() });

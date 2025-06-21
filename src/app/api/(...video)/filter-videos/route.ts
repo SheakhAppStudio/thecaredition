@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { collections, dbConnect } from "@/lib/dbConnect";
 
 
 export async function GET(req: NextRequest) {

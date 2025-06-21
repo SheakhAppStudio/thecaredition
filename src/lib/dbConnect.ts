@@ -6,7 +6,7 @@ const collections = {
   users : "users",
   blogs : "blogs",
   videos : "videos",
-  shops : "shops"
+  shops : "shops",
 };
 
 function dbConnect<T extends Document = Document>(collectionName: string): Collection<T> {

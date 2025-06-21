@@ -1,4 +1,5 @@
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { authorizationCheck } from "@/lib/authorization";
+import { collections, dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +18,18 @@ const admissionCollection = dbConnect(collections.bookings);
 
 // PATCH — update student details
 export async function PATCH(req: NextRequest) {
-
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const id = req.nextUrl.pathname.split("/").pop();
 
@@ -87,7 +99,18 @@ export async function PATCH(req: NextRequest) {
 
 // DELETE — soft delete by marking as "deleted"
 export async function DELETE(req: NextRequest) {
-
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const id = req.nextUrl.pathname.split("/").pop();
 

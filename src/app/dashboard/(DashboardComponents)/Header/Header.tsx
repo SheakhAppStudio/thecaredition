@@ -50,7 +50,7 @@ export function Header() {
           <DropdownMenuTrigger className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500/50 transition-all">
             <div className="relative h-8 w-8 flex-shrink-0">
               <Image 
-                src={session?.user?.adminPhoto || '/default-avatar.png'} 
+                src={session?.user?.profilePhoto || '/default-avatar.png'} 
                 width={32} 
                 height={32} 
                 alt="Profile picture"

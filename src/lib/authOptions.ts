@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { AuthOptions } from "next-auth";
-import { dbConnect, collections } from "@/app/lib/dbConnect";
+import { dbConnect, collections } from "@/lib/dbConnect";
 
 // Extend Session interface to include custom fields
 declare module "next-auth" {
@@ -9,11 +9,8 @@ declare module "next-auth" {
       id: string;
       name?: string | null;
       email?: string | null;
-      adminPhoto?: string | null;
+      profilePhoto?: string | null;
       role: string;
-      instituteId?: string;
-      permissions :string[]
-
     };
   }
 }
@@ -39,9 +36,7 @@ export const authOptions: AuthOptions = {
           email: string;
           password: string;
           role: string;
-          adminPhoto: string;
-          instituteId?: string;
-          permissions?: string[];
+          profilePhoto: string;
         }>({ email,password });
 
         if (!user) {
@@ -55,9 +50,8 @@ console.log(user)
           name: user.name,
           email: user.email,
           role: user.role,
-          adminPhoto: user.adminPhoto,
-          instituteId: user.instituteId ?? "",
-          permissions: user.permissions ?? [] ,
+          profilePhoto: user.profilePhoto,
+
         };
       },
     }),
@@ -89,20 +83,16 @@ console.log(user)
           id: "",
           name: null,
           email: null,
-          adminPhoto: null,
+          profilePhoto: null,
           role: "",
-          instituteId: "",
-          permissions: []
         };
       }
 
       session.user.id = token.id as string;
       session.user.name = token.name;
       session.user.email = token.email;
-      session.user.adminPhoto = token.adminPhoto  as string | null | undefined;
+      session.user.profilePhoto = token.adminPhoto  as string | null | undefined;
       session.user.role = typeof token.role === "string" ? token.role : "";
-      session.user.instituteId = typeof token.instituteId === "string" ? token.instituteId : "";
-      session.user.permissions = token.permissions as string[]
 
       return session;
     },

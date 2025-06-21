@@ -9,8 +9,11 @@ import { useState, useEffect, useRef } from 'react';
 import VideoPlayer from '@/components/VideoPlayer';
 import ServiceTabs from '@/components/ServiceTabs';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+  const session = useSession()
+  console.log(session)
   const sliderRef = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   

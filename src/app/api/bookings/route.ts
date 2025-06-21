@@ -1,12 +1,24 @@
 
 
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { authorizationCheck } from "@/lib/authorization";
+import { collections, dbConnect } from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 
 const bookingsCollection = dbConnect(collections.bookings);
 
 export async function POST(req :NextRequest) {
-
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const formInfo = await req.json();
     console.log(formInfo)
@@ -19,7 +31,18 @@ export async function POST(req :NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const result = await bookingsCollection.find({}).sort({ date: 1 }).toArray();
     return NextResponse.json(result);

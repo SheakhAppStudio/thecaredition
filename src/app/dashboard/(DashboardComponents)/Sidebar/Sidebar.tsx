@@ -141,7 +141,7 @@ export function Sidebar() {
           }}
         >
           <Image 
-            src={session?.user?.adminPhoto || '/default-avatar.png'} 
+            src={session?.user?.profilePhoto || '/default-avatar.png'} 
             width={40} 
             height={40} 
             alt='profile pic' 

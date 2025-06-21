@@ -1,4 +1,5 @@
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { authorizationCheck } from "@/lib/authorization";
+import { collections, dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 interface Booking {
@@ -33,7 +34,18 @@ interface Service {
     const bookingsCollection = dbConnect(collections.bookings);
     
 export async function PATCH(req: NextRequest) {
-
+  const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const id = req.nextUrl.pathname.split("/").pop();
 

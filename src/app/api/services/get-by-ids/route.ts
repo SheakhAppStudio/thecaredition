@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { collections, dbConnect } from "@/app/lib/dbConnect";
+import { collections, dbConnect } from "@/lib/dbConnect";
 import { ObjectId } from "mongodb";
 
 export async function POST(req: Request) {
