@@ -6,6 +6,10 @@ const bookingApi = baseApi.injectEndpoints({
             query : ({search, status,page,limit}) => `/bookings/filter-bookings?search=${search}&status=${status}&page=${page}&limit=${limit}`,
             providesTags : "Bookings",
         }),
+        getFilterDashboard : builder.query({
+            query : () => `/filter-dashboard`,
+            providesTags : "Bookings",
+        }),
         updateBookingStatus : builder.mutation({
             query : ({id,status }) => ({
         url : `/bookings/update-booking-status/${id}`,
@@ -24,4 +28,4 @@ const bookingApi = baseApi.injectEndpoints({
     })
 })
 
-export const  {useGetBookingsQuery,useUpdateBookingStatusMutation,useDeleteBookingMutation} = bookingApi
+export const  {useGetBookingsQuery,useUpdateBookingStatusMutation,useDeleteBookingMutation,useGetFilterDashboardQuery} = bookingApi

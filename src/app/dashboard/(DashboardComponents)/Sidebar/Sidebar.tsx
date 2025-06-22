@@ -14,8 +14,8 @@ import {
   Film,
   BookOpen,
   Settings,
-  ChevronDown,
-  LogOut
+  LogOut,
+  LayoutDashboard
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { signOut, useSession } from 'next-auth/react';
@@ -103,6 +103,23 @@ export function Sidebar() {
       
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
+        {/* Dashboard Button */}
+        <div>
+          <Link
+            href="/dashboard"
+            className={cn(
+              "flex items-center gap-3 px-4 py-3 rounded-lg transition-all",
+              isActive('/dashboard')
+                ? "bg-amber-500 text-black font-medium"
+                : "text-white hover:bg-amber-500/10 hover:text-amber-500"
+            )}
+          >
+            <LayoutDashboard className="h-5 w-5" />
+            <span className="font-medium">Dashboard</span>
+          </Link>
+        </div>
+
+        {/* Existing Navigation Sections */}
         {navSections.map((section) => (
           <div key={section.title} className="space-y-1">
             <div className="flex items-center gap-3 px-3 py-2 text-amber-500 font-medium">
