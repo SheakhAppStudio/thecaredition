@@ -207,8 +207,8 @@ const ShopForm = () => {
 
 if (isLoading) {
   return (
-    <main className="min-h-screen py-8">
-      <div className="max-w-md mx-auto p-8 bg-black rounded-xl shadow-2xl border border-orange-500/20">
+    <main className="min-h-screen">
+      <div className="bg-white rounded-xl shadow-2xl  p-4 md:p-6 border border-orange-500/20">
         <div className="flex flex-col items-center justify-center h-96 space-y-6">
           {/* Animated logo/icon */}
           <div className="relative w-16 h-16">
@@ -272,15 +272,15 @@ if (isLoading) {
 }
 
   return (
-   <main className="min-h-screen py-8">
+   <main className="min-h-screen">
   <Toaster />
   <form 
     onSubmit={handleSubmit(handleFormSubmit)} 
-    className="bg-black rounded-xl shadow-2xl p-8 max-w-4xl mx-auto border border-orange-500/20"
+    className="bg-white rounded-xl shadow-2xl  p-4 md:p-6 border border-orange-500/20"
   >
     <div className="flex items-center justify-between mb-8 border-b border-orange-500/30 pb-4">
-      <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
-        {isEditMode ? 'Edit Shop' : 'Create New Shop'}
+      <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+        {isEditMode ? 'Update Shop' : 'Create New Shop'}
       </h2>
       <div className="h-1 flex-1 bg-gradient-to-r from-orange-500/10 via-orange-500/40 to-orange-500/10 mx-4"></div>
       <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center">
@@ -291,14 +291,14 @@ if (isLoading) {
     </div>
     
     <div className="mb-8">
-      <label htmlFor="title" className="block text-sm font-medium text-orange-300 mb-3">
+      <label htmlFor="title" className="block text-sm font-medium text-black mb-3">
         Shop Title *
       </label>
       <input
         id="title"
         type="text"
         {...register('title', { required: 'Title is required' })}
-        className="w-full px-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+        className="w-full px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
         placeholder="Enter shop name"
         disabled={isSubmitting}
       />
@@ -313,7 +313,7 @@ if (isLoading) {
     </div>
 
     <div className="mb-8">
-      <label className="block text-sm font-medium text-orange-300 mb-3">
+      <label className="block text-sm font-medium text-black mb-3">
         Shop Images (Max 20)
       </label>
       <input
@@ -322,7 +322,7 @@ if (isLoading) {
         multiple
         accept="image/jpeg, image/jpg, image/png, image/webp"
         onChange={handleImageChange}
-        className="w-full px-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-500/20 file:text-orange-400 hover:file:bg-orange-500/30 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+        className="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-500/20 file:text-orange-400 hover:file:bg-orange-500/30 w-full px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
         disabled={isSubmitting || imagePreviews.length >= 20}
       />
       
@@ -365,17 +365,17 @@ if (isLoading) {
     </div>
 
     <div className="mb-8">
-      <label className="block text-sm font-medium text-orange-300 mb-3">
+      <label className="block text-sm font-medium text-black mb-3">
         Description *
       </label>
-      <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+      <div className=" overflow-hidden">
         <ReactQuill
           theme="snow"
           value={content || ''}
           onChange={(value) => setValue('content', value, { shouldValidate: true })}
           modules={modules}
           formats={formats}
-          className="bg-gray-900 text-white h-64"
+          className="w-full  py-3 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
           placeholder="Write your shop description here..."
         />
       </div>
@@ -389,11 +389,11 @@ if (isLoading) {
       )}
     </div>
 
-    <div className="flex justify-end gap-4 pt-6 border-t border-gray-800">
+    <div className="flex justify-end gap-4 ">
       <button
         type="button"
-        onClick={() => isEditMode ? router.push('/admin/shops') : resetForm()}
-        className="px-6 py-3 border border-gray-700 rounded-lg text-orange-300 hover:bg-gray-800/50 hover:border-orange-400/30 transition-all duration-200 flex items-center disabled:opacity-70 disabled:cursor-not-allowed"
+        onClick={() => isEditMode ? router.back() : resetForm()}
+        className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg border  border-red-600  text-red-600 hover:text-white hover:bg-gradient-to-r  hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
         disabled={isSubmitting}
       >
         {isEditMode ? (
@@ -414,7 +414,7 @@ if (isLoading) {
       </button>
       <button
         type="submit"
-        className="px-8 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg hover:from-orange-700 hover:to-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-black transition-all duration-200 shadow-lg hover:shadow-orange-500/20 flex items-center disabled:opacity-70 disabled:cursor-not-allowed"
+        className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

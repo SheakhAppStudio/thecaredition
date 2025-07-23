@@ -20,7 +20,8 @@ export async function GET(req: NextRequest) {
   }
   try {
     // Fetch all users from the database
-    const users = await dbConnect(collections.users).find().toArray();
+    const usersCollection = await dbConnect(collections.users);
+    const users = await usersCollection.find().toArray();
 
     if (users && users.length > 0) {
       return NextResponse.json(users, { status: 200 });

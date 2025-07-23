@@ -7,38 +7,36 @@ import { FaWhatsapp, FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io';
 import { HiMenu } from 'react-icons/hi';
 import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const headerRef = useRef<HTMLElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
-  
+  const pathname = usePathname();
+
   // Handle scroll event for header background change and visibility
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Check if scrolled more than 10px for background change
       if (currentScrollY > 10) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
       
-      // Hide header when scrolling down, show when scrolling up
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down & past threshold - hide header
         setIsHeaderVisible(false);
       } else {
-        // Scrolling up or at top - show header
         setIsHeaderVisible(true);
       }
       
-      // Update last scroll position
       setLastScrollY(currentScrollY);
     };
 
@@ -49,17 +47,14 @@ export default function Header() {
   // Handle body scroll lock when menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      // Lock body scroll
       document.body.style.overflow = 'hidden';
       document.body.style.touchAction = 'none';
     } else {
-      // Restore body scroll
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
     }
     
     return () => {
-      // Cleanup - ensure scroll is restored when component unmounts
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
     };
@@ -86,7 +81,7 @@ export default function Header() {
   // Close menu on window resize (if desktop)
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768 && isMobileMenuOpen) {
+      if (window.innerWidth >= 1024 && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -95,17 +90,28 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobileMenuOpen]);
   
-  // Toggle mobile menu
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(prev => !prev);
   }, []);
   
-  // Close mobile menu
   const closeMobileMenu = useCallback(() => {
     setIsMobileMenuOpen(false);
   }, []);
-const pathname = usePathname()
-if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathname.includes("/signup")){
+
+  if(pathname.includes("/dashboard") || pathname.includes("/signin") || pathname.includes("/signup")) {
+    return null;
+  }
+
+  const navItems = [
+    { href: "/services", text: "services" },
+    { href: "/shop", text: "shop" },
+    { href: "/service-estimator", text: "service estimator" },
+    { href: "/videos", text: "youtube & media", isYoutube: true },
+    { href: "/blogs", text: "blog & articles" },
+    { href: "/about-us", text: "work for us" },
+    { href: "/contact-us", text: "contact us" },
+  ];
+
   return (
     <header 
       ref={headerRef}
@@ -119,7 +125,7 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
           : '-translate-y-full'
       } text-white`}
     >
-      <div className=" mx-auto lg:px-28 px-5">
+      <div className="mx-auto lg:px-28 px-5">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
@@ -129,51 +135,44 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
                 alt="Car Edition Pro Logo" 
                 width={140} 
                 height={40} 
-                
                 className="transition-transform group-hover:scale-105 brightness-0 invert w-28 h-20"
               />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-6 lg:space-x-8">
-            <Link href="/shop"  rel="noopener noreferrer" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Shop
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link href="/services" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Services
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link href="/service-estimator" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Service Estimator
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link href="/videos" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Videos
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link href="/blogs" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Blogs
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-
-            <Link href="/about-us" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              About Us
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
-            <Link href="/contact-us" className="relative font-medium hover:text-[#f56e13] transition-colors group py-1 uppercase">
-              Contact
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#f56e13] transition-all duration-300 group-hover:w-full"></span>
-            </Link>
+          <nav 
+            className="hidden lg:flex items-center gap-5 space-x-1"
+            onMouseLeave={() => setHoveredNav(null)}
+          >
+            {navItems.map((item) => (
+              <Link 
+                key={item.href}
+                href={item.href}
+                className="relative font-medium text-white px-4 py-3 font-poppins group"
+                onMouseEnter={() => setHoveredNav(item.href)}
+              >
+                <span className="relative z-10">{item.text}</span>
+                
+                {/* Hover background */}
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                  <div className={cn(
+                    "w-full h-full bg-red-600 -skew-x-12 transition-all duration-300 origin-center",
+                    (item.isYoutube && hoveredNav === null) || hoveredNav === item.href
+                      ? "opacity-100 scale-x-100"
+                      : "opacity-0 scale-x-0"
+                  )}></div>
+                </div>
+              </Link>
+            ))}
+            
             <a 
               href="https://wa.me/1234567890" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 hidden lg:flex items-center gap-2"
+              className="bg-[#25D366] hover:bg-[#128C7E] text-white px-3 py-3 rounded-md font-medium transition-colors duration-200 flex items-center gap-2"
             >
               <FaWhatsapp className="w-5 h-5" />
-              WhatsApp
             </a>
           </nav>
 
@@ -188,12 +187,14 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
             {isMobileMenuOpen ? (
               <IoMdClose className="w-7 h-7 text-white" />
             ) : (
-              <HiMenu className="w-7 h-7 text-white hover:text-[#f56e13] transition-colors" />
+              <HiMenu className="w-7 h-7 text-white hover:text-red-600 transition-colors" />
             )}
           </button>
         </div>
       </div>
-      
+      <div className='lg:flex hidden justify-center items-center h-10 bg-white backdrop-blur-sm shadow-lg'>
+        <p className='text-gray-800 text-sm font-semibold font-poppins'>SAVE  £10  OFF YOUR FIRST SERVICE WITH US WHEN YOU BOOK ONLINE</p>
+      </div>
       {/* Mobile Navigation - Full Screen Overlay with Slide Animation */}
       <div 
         className={`fixed inset-0 bg-black z-[100] transition-all duration-500 ${
@@ -225,63 +226,17 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
           {/* Mobile Menu Content */}
           <div className="px-6 py-8">
             <nav className="flex flex-col space-y-5">
-              <Link 
-                href="/shop" 
-                rel="noopener noreferrer"
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>Shop</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
-              <Link 
-                href="/services" 
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>Services</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
-              <Link 
-                href="/service-estimator" 
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>Service Estimator</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
-              <Link 
-                href="/videos" 
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>Videos</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
-              <Link 
-                href="/blogs" 
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>Blogs</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
-              <Link 
-                href="/about-us" 
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>About Us</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
-              <Link 
-                href="/contact-us" 
-                className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-[#f56e13] hover:border-[#f56e13] transition-colors flex items-center justify-between"
-                onClick={closeMobileMenu}
-              >
-                <span>Contact</span>
-                <span className="text-[#f56e13]">→</span>
-              </Link>
+              {navItems.map((item) => (
+                <Link 
+                  key={item.href}
+                  href={item.href} 
+                  className="px-4 py-3 font-medium text-xl border-b border-gray-800 hover:text-red-600 hover:border-red-600 transition-colors flex items-center justify-between"
+                  onClick={closeMobileMenu}
+                >
+                  <span>{item.text}</span>
+                  <span className="text-red-600">→</span>
+                </Link>
+              ))}
             </nav>
             
             {/* WhatsApp Button */}
@@ -300,13 +255,13 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
             
             {/* Social Media Links */}
             <div className="mt-12 flex justify-center space-x-6">
-              <a href="#" className="text-gray-400 hover:text-[#f56e13] transition-colors p-2" aria-label="Facebook">
+              <a href="#" className="text-gray-400 hover:text-red-600 transition-colors p-2" aria-label="Facebook">
                 <FaFacebookF className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-[#f56e13] transition-colors p-2" aria-label="Instagram">
+              <a href="#" className="text-gray-400 hover:text-red-600 transition-colors p-2" aria-label="Instagram">
                 <FaInstagram className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-[#f56e13] transition-colors p-2" aria-label="Twitter">
+              <a href="#" className="text-gray-400 hover:text-red-600 transition-colors p-2" aria-label="Twitter">
                 <FaTwitter className="h-6 w-6" />
               </a>
             </div>
@@ -315,6 +270,4 @@ if(!pathname.includes("/dashboard") && !pathname.includes("/signin") && !pathnam
       </div>
     </header>
   );
-}
-  
 }

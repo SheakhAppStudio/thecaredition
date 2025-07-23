@@ -1,5 +1,6 @@
 import { authorizationCheck } from "@/lib/authorization";
 import { collections, dbConnect } from "@/lib/dbConnect";
+import { getVehicleByRegistration } from "@/services/vehicleApi";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,30 +11,26 @@ interface Booking extends Document {
     email: string;
     phone: string;
   };
-  vehicle: {
-    registrationNumber: string;
-    make: string;
-    model: string;
-    yearOfManufacture: number;
-  };
+  vehicle: string;
   serviceIds: ObjectId[];
-  services?: Service[];
   otherService: string;
   totalPrice: number;
   status: string;
   createdAt?: Date;
 }
 
-interface Service {
-  _id: ObjectId;
-  name: string;
-  description: string;
-  basePrice: number;
-  category?: string;
-  duration?: number;
+interface VehicleDetails {
+  registrationNumber: string;
+  make: string;
+  model: string;
+  color: string;
+  fuelType: string;
+  engineCapacity: number;
+  yearOfManufacture: number;
+  [key: string]: any; // For additional properties
 }
 
-const bookingsCollection = dbConnect<Booking>(collections.bookings);
+const bookingsCollection = await dbConnect<Booking>(collections.bookings);
 
 // Create indexes when the module loads (run once)
 async function createIndexes() {
@@ -53,38 +50,10 @@ async function createIndexes() {
 // Run index creation
 createIndexes();
 
-export async function POST(req: NextRequest) {
-    const referer = req.headers.get('referer') || '';
-  const refererPath = new URL(referer).pathname;
-  
-  // Pass referer path to authorization check
-  const authResult = await authorizationCheck(refererPath);
-  
-  if (!authResult.success) {
-    return NextResponse.json(
-      { error: authResult.error },
-      { status: authResult.status }
-    );
-  }
-  try {
-    const formInfo = await req.json();
-    const result = await bookingsCollection.insertOne({ 
-      ...formInfo, 
-      isCertified: "student", 
-      createdAt: new Date() 
-    });
-    return NextResponse.json(result, { status: 201 }); 
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to create booking" }, { status: 500 });
-  }
-}
-
 export async function GET(req: NextRequest) {
-    const referer = req.headers.get('referer') || '';
+  const referer = req.headers.get('referer') || '';
   const refererPath = new URL(referer).pathname;
   
-  // Pass referer path to authorization check
   const authResult = await authorizationCheck(refererPath);
   
   if (!authResult.success) {
@@ -93,6 +62,7 @@ export async function GET(req: NextRequest) {
       { status: authResult.status }
     );
   }
+
   try {
     const { searchParams } = new URL(req.url);
     const searchTerm = searchParams.get('search') || '';
@@ -114,7 +84,7 @@ export async function GET(req: NextRequest) {
           { "customer.name": { $regex: searchRegex } },
           { "customer.email": { $regex: searchRegex } },
           { "customer.phone": { $regex: searchRegex } },
-          { "vehicle.registrationNumber": { $regex: searchRegex } }
+          { "vehicle": { $regex: searchRegex } }
         ];
       }
     }
@@ -132,7 +102,7 @@ export async function GET(req: NextRequest) {
             "customer.name": 1,
             "customer.email": 1,
             "customer.phone": 1,
-            "vehicle.registrationNumber": 1,
+            "vehicle": 1,
             status: 1,
             createdAt: 1
           }
@@ -140,31 +110,52 @@ export async function GET(req: NextRequest) {
       ]).toArray()
     ]);
 
-    // Group by customer and collect all vehicle registration numbers
-    const customerMap = new Map();
-    
-    bookings.forEach(booking => {
-      const key = `${booking.customer.name}-${booking.customer.email}-${booking.customer.phone}`;
+    // Group by customer and collect unique vehicles
+    const customerMap = new Map<string, {
+      name: string;
+      email: string;
+      phone: string;
+      vehicles: Map<string, VehicleDetails>; // Using Map to ensure unique registration numbers
+    }>();
+
+    // Process bookings and fetch vehicle details
+    for (const booking of bookings) {
+      const key = `${booking.customer.email}`.toLowerCase(); // Using email as unique identifier
       
       if (!customerMap.has(key)) {
         customerMap.set(key, {
           name: booking.customer.name,
           email: booking.customer.email,
           phone: booking.customer.phone,
-          vehicles: new Set()
+          vehicles: new Map()
         });
       }
-      
-      // Add vehicle registration number if it exists
-      if (booking.vehicle?.registrationNumber) {
-        customerMap.get(key).vehicles.add(booking.vehicle.registrationNumber);
-      }
-    });
 
-    // Convert Set to array for each customer
+      const customerEntry = customerMap.get(key);
+      
+      if (booking.vehicle && customerEntry) {
+        try {
+          const cleanReg = booking.vehicle.replace(/\s+/g, '').toUpperCase();
+          
+          // Only fetch vehicle details if we haven't seen this registration before
+          if (!customerEntry.vehicles.has(cleanReg)) {
+            const vehicleData = await getVehicleByRegistration(cleanReg);
+            if (vehicleData?.registrationNumber) {
+              customerEntry.vehicles.set(cleanReg, vehicleData);
+            }
+          }
+        } catch (error) {
+          console.error(`Error fetching vehicle details for ${booking.vehicle}:`, error);
+        }
+      }
+    }
+
+    // Convert to final output format
     const customersWithVehicles = Array.from(customerMap.values()).map(customer => ({
-      ...customer,
-      vehicles: Array.from(customer.vehicles)
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      vehicles: Array.from(customer.vehicles.values())
     }));
 
     return NextResponse.json({

@@ -31,7 +31,7 @@ interface Service {
   category?: string;
   duration?: number;
 }
-    const bookingsCollection = dbConnect(collections.bookings);
+    const bookingsCollection = await dbConnect(collections.bookings);
     
 export async function PATCH(req: NextRequest) {
   const referer = req.headers.get('referer') || '';
@@ -61,12 +61,14 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Bookings not found" }, { status: 404 });
     }
 
-    const updateDoc = {
+    const updateDoc: { $set: { [key: string]: any } } = {
       $set: {
-          status: update.status, // "name"  
+        status: update.status, // "name"  
       }
     };
-
+    if (update.confirmedPrice !== undefined || update.confirmedPrice !== null || update.confirmedPrice !== '') {
+      updateDoc.$set['confirmedPrice'] = update.confirmedPrice; // "confirmedPrice"
+    }
     const result = await bookingsCollection.updateOne(filter, updateDoc);
     return NextResponse.json({ message: "admission updated successfully", result }, { status: 200 });
   } catch (error) {

@@ -103,7 +103,7 @@ export default function ServiceSelection() {
           <h2 className="text-2xl font-bold text-red-500 mb-4">No Vehicle Selected</h2>
           <button
             onClick={() => window.location.href = '/service-estimator'}
-            className="py-2 px-6 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg transition duration-300"
+            className="py-2 px-6 inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg transition duration-300"
           >
             Go Back
           </button>
@@ -285,18 +285,18 @@ export default function ServiceSelection() {
             </div>
             
             {/* Continue button */}
-            <div className="flex justify-end">
+             <div className="flex justify-end">
               <button
                 onClick={() => {
-                  if (selectedServices.length > 0) {
+                  if (selectedServices.length > 0 || otherService.trim()) {
                     localStorage.setItem('selectedServices', JSON.stringify(selectedServices));
                     localStorage.setItem('otherService', otherService);
                     localStorage.setItem('totalPrice', totalPrice.toString());
                     window.location.href = '/service-estimator/customer-details';
                   }
                 }}
-                disabled={selectedServices.length === 0}
-                className={`py-3 px-8 rounded-lg font-bold text-lg transition duration-300 ${selectedServices.length === 0 ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'bg-orange-600 hover:bg-orange-700 text-white'}`}
+                disabled={selectedServices.length === 0 && !otherService.trim()  }
+                className={`py-3 px-8 rounded-lg font-bold text-lg transition duration-300 ${selectedServices.length === 0 && !otherService.trim()  ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-gradient-to-r from-orange to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2'}`}
               >
                 Continue to Details
               </button>

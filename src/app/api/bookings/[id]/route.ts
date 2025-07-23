@@ -13,7 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 // Connect collections with types
-const admissionCollection = dbConnect(collections.bookings);
+const admissionCollection = await dbConnect(collections.bookings);
 
 
 // PATCH — update student details

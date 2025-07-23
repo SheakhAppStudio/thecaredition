@@ -19,11 +19,12 @@ interface Admission extends Document {
 
 
 // Connect collections with types
-const shopsCollection = dbConnect<Admission>(collections.shops);
+const shopsCollection =await dbConnect<Admission>(collections.shops);
 
 
 // GET — fetch admission by ID with related data
 export async function GET(req: NextRequest) {
+  
 
   try {
     const id = req.nextUrl.pathname.split("/").pop();

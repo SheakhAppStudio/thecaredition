@@ -30,16 +30,16 @@ const ADMIN_ROUTES = [
   '/dashboard/blog-list',
   '/dashboard/add-video',
   '/dashboard/video-list',
-  '/dashboard/settings'
+  '/dashboard/system-setting'
 ];
 
 // Define public routes that don't require admin privileges
-const PUBLIC_ROUTES = [
-  '/dashboard/profile',
-  '/dashboard/settings',
-  '/api/user/profile',
-  '/api/notifications'
-];
+// const PUBLIC_ROUTES = [
+//   '/dashboard/profile',
+//   '/dashboard/settings',
+//   '/api/user/profile',
+//   '/api/notifications'
+// ];
 
 type AuthorizationResult = 
   | { success: true; user: Omit<User, 'password'>; status: 200 }
@@ -47,38 +47,38 @@ type AuthorizationResult =
 
 async function authorizationCheck(refererPath?: string): Promise<AuthorizationResult> {
   try {
-    // const userCollection = dbConnect(collections.users);
-    // const session = await getServerSession(authOptions);
-    const  user = {
-          _id: new ObjectId("6856cf42f58b92803e13931b"),
-          name: "Car Edition Pro",
-          email: "careditionpro2025@gmail.com",
-          profilePhoto: "https://www.shutterstock.com/image-illustration/generic-brandless-black-car-frontal-260nw-651562303.jpg",
-          role: "admin",
-          passsword : "cep2025@#"
-        };
+    const userCollection = await dbConnect(collections.users);
+    const session = await getServerSession(authOptions);
+    // const  user = {
+    //       _id: new ObjectId("6856cf42f58b92803e13931b"),
+    //       name: "Car Edition Pro",
+    //       email: "careditionpro2025@gmail.com",
+    //       profilePhoto: "https://www.shutterstock.com/image-illustration/generic-brandless-black-car-frontal-260nw-651562303.jpg",
+    //       role: "admin",
+    //       passsword : "cep2025@#"
+    //     };
     // If no session exists, deny access
-    // if (!session?.user?.id) {
-    //   return { success: false, error: "Unauthorized Access", status: 401 };
-    // }
+    if (!session?.user?.id) {
+      return { success: false, error: "Unauthorized Access", status: 401 };
+    }
 
     // Find user in database
-    // const user = await userCollection.findOne({ 
-    //   _id: new ObjectId(session.user.id) 
-    // }) as unknown as User;
+    const user = await userCollection.findOne({ 
+      _id: new ObjectId(session.user.id) 
+    }) as unknown as User;
 
     if (!user) {
       return { success: false, error: "User not found", status: 404 };
     }
 
     // Skip permission checks for public routes
-    if (refererPath && PUBLIC_ROUTES.some(route => refererPath.startsWith(route))) {
-      return { 
-        success: true, 
-        user: { ...user }, 
-        status: 200 
-      };
-    }
+    // if (refererPath && PUBLIC_ROUTES.some(route => refererPath.startsWith(route))) {
+    //   return { 
+    //     success: true, 
+    //     user: { ...user }, 
+    //     status: 200 
+    //   };
+    // }
 
     // Check if the requested route is an admin route
     const isAdminRoute = refererPath && ADMIN_ROUTES.some(route => 

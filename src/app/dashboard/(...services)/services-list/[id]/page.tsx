@@ -88,18 +88,83 @@ console.log(response?.result)
     }
   };
 
-  if (isLoading) return <div>Loading service data...</div>;
+ if (isLoading) {
+  return (
+    <main className="min-h-screen">
+      <div className="bg-white rounded-xl shadow-2xl  p-4 md:p-6 border border-orange-500/20">
+        <div className="flex flex-col items-center justify-center h-96 space-y-6">
+          {/* Animated logo/icon */}
+          <div className="relative w-16 h-16">
+            <div className="absolute inset-0 rounded-full bg-orange-500/10 animate-ping"></div>
+            <div className="absolute inset-2 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-8 w-8 text-white animate-pulse" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" 
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* Loading text with animated dots */}
+          <div className="text-center space-y-2">
+            <h3 className="text-xl font-medium bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+             Loading Service Data
+            </h3>
+            <p className="text-orange-300/80 flex justify-center items-center">
+              Loading
+              <span className="flex space-x-1 ml-1">
+                <span className="animate-bounce inline-block h-1 w-1 rounded-full bg-orange-400 [animation-delay:-0.3s]"></span>
+                <span className="animate-bounce inline-block h-1 w-1 rounded-full bg-orange-500 [animation-delay:-0.15s]"></span>
+                <span className="animate-bounce inline-block h-1 w-1 rounded-full bg-orange-600"></span>
+              </span>
+            </p>
+          </div>
+
+          {/* Contained progress bar */}
+          <div className="w-full overflow-hidden rounded-full h-1.5 bg-gray-800 relative">
+            <div 
+              className="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-orange-600 rounded-full"
+              style={{
+                width: '100%',
+                transform: 'translateX(-100%)',
+                animation: 'progress 1.5s ease-in-out infinite',
+              }}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      {/* CSS for proper progress animation */}
+      <style jsx>{`
+        @keyframes progress {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
+    </main>
+  );
+}
+
   if (!service) return <div>Service not found</div>;
 
   return (
-    <main className="min-h-screen py-8">
+    <main className="min-h-screen ">
       <Toaster />
       <form 
         onSubmit={handleSubmit(handleFormSubmit)} 
-        className="bg-black rounded-xl shadow-2xl p-8 max-w-4xl mx-auto border border-orange-500/20"
+        className="bg-white rounded-xl shadow-2xl  p-4 md:p-6 border border-orange-500/20"
       >
         <div className="flex items-center justify-between mb-8 border-b border-orange-500/30 pb-4">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
             Update Service
           </h2>
           <div className="h-1 flex-1 bg-gradient-to-r from-orange-500/10 via-orange-500/40 to-orange-500/10 mx-4"></div>
@@ -112,7 +177,7 @@ console.log(response?.result)
         
         {/* Service Name Field */}
         <div className="mb-8">
-          <label htmlFor="name" className="block text-sm font-medium text-orange-300 mb-3">
+          <label htmlFor="name" className="block text-sm font-medium text-black mb-3">
             Service Name *
           </label>
           <input
@@ -125,7 +190,8 @@ console.log(response?.result)
                 message: 'Name must be at least 3 characters'
               }
             })}
-            className="w-full px-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+            className="w-full px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent
+             text-black placeholder-gray-500 transition-all duration-200"
           />
           {errors.name && (
             <p className="mt-2 text-sm text-orange-400 flex items-center">
@@ -139,7 +205,7 @@ console.log(response?.result)
 
         {/* Service Description Field */}
         <div className="mb-8">
-          <label htmlFor="description" className="block text-sm font-medium text-orange-300 mb-3">
+          <label htmlFor="description" className="block text-sm font-medium text-black mb-3">
             Service Description *
           </label>
           <textarea
@@ -152,7 +218,7 @@ console.log(response?.result)
                 message: 'Description must be at least 10 characters'
               }
             })}
-            className="w-full px-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+            className="w-full px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
           />
           {errors.description && (
             <p className="mt-2 text-sm text-orange-400 flex items-center">
@@ -166,7 +232,7 @@ console.log(response?.result)
 
         {/* Base Price Field */}
         <div className="mb-8">
-          <label htmlFor="basePrice" className="block text-sm font-medium text-orange-300 mb-3">
+          <label htmlFor="basePrice" className="block text-sm font-medium text-black mb-3">
             Base Price *
           </label>
           <div className="relative">
@@ -183,7 +249,7 @@ console.log(response?.result)
                   message: 'Price must be greater than 0'
                 }
               })}
-              className="w-full pl-8 pr-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+              className="w-full pl-8 pr-5  px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
             />
           </div>
           {errors.basePrice && (
@@ -196,22 +262,22 @@ console.log(response?.result)
           )}
         </div>
 
-        <div className="flex justify-end gap-4 pt-6 border-t border-gray-800">
+        <div className="flex justify-end gap-4 pt-6 ">
           <button
             type="button"
-            onClick={() => router.push('/services')}
-            className="px-6 py-3 border border-gray-700 rounded-lg text-orange-300 hover:bg-gray-800/50 hover:border-orange-400/30 transition-all duration-200 flex items-center"
+            onClick={() => router.back()}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg border  border-red-600  text-red-600 hover:text-white hover:bg-gradient-to-r  hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-8 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg hover:from-orange-700 hover:to-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-black transition-all duration-200 shadow-lg hover:shadow-orange-500/20 flex items-center disabled:opacity-70"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             {isSubmitting ? (
               <>
-                <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>

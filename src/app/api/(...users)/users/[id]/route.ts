@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authorizationCheck } from "@/lib/authorization";
 
 // Connect collections
-const usersCollection = dbConnect(collections.users);
+const usersCollection =await dbConnect(collections.users);
 
 
 // GET — fetch admission by ID

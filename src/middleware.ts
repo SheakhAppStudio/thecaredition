@@ -24,45 +24,45 @@ const ADMIN_ROUTES = [
   '/dashboard/blog-list',
   '/dashboard/add-video',
   '/dashboard/video-list',
-  '/dashboard/settings'
+  '/dashboard/system-setting'
 ];
 
 export const middleware = async (req: NextRequest): Promise<NextResponse> => {
-//   const token = await getToken({ req }) as Token;
-//   const path = req.nextUrl.pathname;
-// console.log(token)
-//   // Check if the requested path is an admin route
-//   const isAdminRoute = ADMIN_ROUTES.some(route => 
-//     path === route || path.startsWith(`${route}/`)
-//   );
+  const token = await getToken({ req }) as Token;
+  const path = req.nextUrl.pathname;
+console.log(token)
+  // Check if the requested path is an admin route
+  const isAdminRoute = ADMIN_ROUTES.some(route => 
+    path === route || path.startsWith(`${route}/`)
+  );
 
-//   // If not an admin route, continue
-//   if (!isAdminRoute) {
-//     return NextResponse.next();
-//   }
+  // If not an admin route, continue
+  if (!isAdminRoute) {
+    return NextResponse.next();
+  }
 
-//   // If no token and trying to access admin route, redirect to login
-//   if (!token && isAdminRoute) {
-//     const callbackUrl = encodeURIComponent(path);
-//     return NextResponse.redirect(new URL(`/api/auth/signin?callbackUrl=${callbackUrl}`, req.url));
-//   }
+  // If no token and trying to access admin route, redirect to login
+  if (!token && isAdminRoute) {
+    const callbackUrl = encodeURIComponent(path);
+    return NextResponse.redirect(new URL(`/api/auth/signin?callbackUrl=${callbackUrl}`, req.url));
+  }
 
-//   // If token exists but no role (shouldn't happen with proper auth setup)
-//   if (!token?.role && isAdminRoute) {
-//     return NextResponse.redirect(new URL('/api/auth/signin', req.url));
-//   }
+  // If token exists but no role (shouldn't happen with proper auth setup)
+  if (!token?.role && isAdminRoute) {
+    return NextResponse.redirect(new URL('/api/auth/signin', req.url));
+  }
 
-//   // Check for admin roles (add your specific admin roles here)
-//   const isAdmin = [
-//     'admin' // Add any other admin roles you have
-//   ].includes(token?.role || '');
+  // Check for admin roles (add your specific admin roles here)
+  const isAdmin = [
+    'admin' // Add any other admin roles you have
+  ].includes(token?.role || '');
 
-//   // If not an admin, redirect to login or unauthorized page
-//   if (!isAdmin && isAdminRoute) {
-//     return NextResponse.redirect(new URL('/unauthorized', req.url));
-//   }
+  // If not an admin, redirect to login or unauthorized page
+  if (!isAdmin && isAdminRoute) {
+    return NextResponse.redirect(new URL('/unauthorized', req.url));
+  }
 
-  // For admin routes that don't require specific permissions
+
   return NextResponse.next();
 };
 

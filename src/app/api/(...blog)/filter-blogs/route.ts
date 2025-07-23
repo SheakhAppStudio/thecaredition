@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
 
 
-    const blogsCollection = dbConnect(collections.blogs);
+    const blogsCollection =await dbConnect(collections.blogs);
 
 
     // Build query

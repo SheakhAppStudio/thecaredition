@@ -4,7 +4,7 @@ import { authorizationCheck } from "@/lib/authorization";
 import { collections, dbConnect } from "@/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
 
-const servicesCollection = dbConnect(collections.services);
+const servicesCollection =await dbConnect(collections.services);
 
 export async function POST(req :NextRequest) {
   const referer = req.headers.get('referer') || '';

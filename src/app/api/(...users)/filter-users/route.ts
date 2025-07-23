@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
       { status: authResult.status }
     );
   }
-  const usersCollection = dbConnect(collections.users);
+  const usersCollection =await dbConnect(collections.users);
 
   try {
     const {searchParams} = req.nextUrl;

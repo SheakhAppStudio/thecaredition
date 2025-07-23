@@ -27,6 +27,16 @@
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, #fdba74, #c2410c); /* Lighter orange on hover */
 }
+.rhombus {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
 
 /* For Firefox */
 * {

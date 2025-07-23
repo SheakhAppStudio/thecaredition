@@ -22,10 +22,22 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React from 'react';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
 export function Sidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const router = useRouter();
+  const [open, setOpen] = React.useState(false);
 
   const navSections = [
     {
@@ -82,18 +94,25 @@ export function Sidebar() {
       title: "Settings",
       icon: <Settings className="h-5 w-5 text-amber-500" />,
       items: [
-        { href: '/dashboard/settings', icon: <Settings className="h-4 w-4" />, name: 'System Settings' },
+        { href: '/dashboard/system-setting', icon: <Settings className="h-4 w-4" />, name: 'System Settings' },
       ]
     }
   ];
 
   const isActive = (href: string) => pathname === href;
 
+  const handleLogout = async () => {
+    await signOut({ redirect: false, callbackUrl: "/" });
+    setOpen(false);
+    router.push("/");
+    router.refresh();
+  };
+
   return (
     <div className="flex h-full flex-col bg-black border-r border-gray-800 lg:w-72 w-64">
       {/* Header */}
       <div className="flex h-20 items-center justify-center border-b border-gray-800 px-4">
-        <Link href={"/"} className="flex items-center gap-2">
+        <Link href={"/dashboard"} className="flex items-center gap-2">
           <div className="w-8 h-8 bg-amber-500 rounded-md flex items-center justify-center">
             <span className="font-bold text-black">CE</span>
           </div>
@@ -149,28 +168,49 @@ export function Sidebar() {
 
       {/* User Profile */}
       <div className="border-t border-gray-800 p-4">
-        <div 
-          className="flex items-center gap-3 cursor-pointer group"
-          onClick={async () => {
-            await signOut({ redirect: false, callbackUrl: "/" });
-            router.push("/");
-            router.refresh();
-          }}
-        >
-          <Image 
-            src={session?.user?.profilePhoto || '/default-avatar.png'} 
-            width={40} 
-            height={40} 
-            alt='profile pic' 
-            className="h-10 w-10 rounded-full border-2 border-amber-500"
-            priority
-          />
-          <div className="flex-1">
-            <p className="text-sm font-medium text-white">{session?.user?.name || 'Admin User'}</p>
-            <p className="text-xs text-gray-400">{session?.user?.email || 'admin@caredition.pro'}</p>
-          </div>
-          <LogOut className="h-5 w-5 text-gray-400 group-hover:text-amber-500 transition-colors" />
-        </div>
+        <Dialog open={open} onOpenChange={setOpen}>
+          <DialogTrigger asChild>
+            <div className="flex items-center gap-3 cursor-pointer group">
+              <Image 
+                src={session?.user?.profilePhoto || '/default-avatar.png'} 
+                width={40} 
+                height={40} 
+                alt='profile pic' 
+                className="h-10 w-10 rounded-full border-2 border-amber-500"
+                priority
+              />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-white">{session?.user?.name || 'Admin User'}</p>
+                <p className="text-xs text-gray-400">{session?.user?.email || 'admin@caredition.pro'}</p>
+              </div>
+              <LogOut className="h-5 w-5 text-gray-400 group-hover:text-amber-500 transition-colors" />
+            </div>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] bg-gray-900 border-gray-700">
+            <DialogHeader>
+              <DialogTitle className="text-white">Confirm Logout</DialogTitle>
+              <DialogDescription className="text-gray-300">
+                Are you sure you want to logout from your account?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => setOpen(false)}
+                className="text-white border-gray-600 hover:bg-gray-700"
+              >
+                Cancel
+              </Button>
+              <Button 
+                variant="destructive"
+                onClick={handleLogout}
+                className="bg-amber-600 hover:bg-amber-700"
+              >
+                Logout
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

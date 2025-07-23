@@ -19,7 +19,8 @@ export async function POST(req: Request) {
     const objectIds = ids.map((id :string) => new ObjectId(id));
 
     // Fetch services that match any of the provided IDs
-    const services = await dbConnect(collections?.services).find({
+    const servicesCollection = await dbConnect(collections?.services);
+    const services = await servicesCollection.find({
       _id: { $in: objectIds }
     }).project({
       _id: 1,

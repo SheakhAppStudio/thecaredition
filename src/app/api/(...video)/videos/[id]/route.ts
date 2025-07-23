@@ -19,7 +19,7 @@ interface Admission extends Document {
 
 
 // Connect collections with types
-const videosCollection = dbConnect<Admission>(collections.videos);
+const videosCollection = await dbConnect<Admission>(collections.videos);
 
 
 // GET — fetch admission by ID with related data
@@ -80,6 +80,9 @@ export async function PATCH(req: NextRequest) {
           videoYoutubeLink: update.videoYoutubeLink, // "maritalStatus" mapped to "marital"
           videoEmbedLink: update.videoEmbedLink, // "nationalId"
           videoThumbnail: update.videoThumbnail, // "mobile" mapped to "telPersonal"
+          metaTitle: update.metaTitle, // "mobile" mapped to "telPersonal"
+          metaDescription: update.metaDescription, // "mobile" mapped to "telPersonal"
+          metaImage: update.metaImage, // "mobile" mapped to "telPersonal"
          
       }
     };

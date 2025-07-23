@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { collections, dbConnect } from "@/lib/dbConnect";
+import { authorizationCheck } from "@/lib/authorization";
 
 
 export async function GET(req: NextRequest) {
+    const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const { searchParams } = new URL(req.url);
     const searchTerm = searchParams.get("search") || "";
@@ -10,7 +23,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
 
 
-    const shopsCollection = dbConnect(collections.shops);
+    const shopsCollection = await dbConnect(collections.shops);
 
 
     // Build query

@@ -1013,6 +1013,27 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              <div className="flex-shrink-0 w-full md:w-1/4 lg:w-1/5 min-w-[280px] snap-start">
+                <div className="relative aspect-square overflow-hidden" style={{clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'}}>
+                  <Image
+                    src="/images/services/_U5A3228.jpeg"
+                    alt="Tyres & Puncture Repair"
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute bottom-0 left-0 p-6 text-white">
+                    <h3 className="text-base font-semibold mb-2">TYRES & PUNCTURE REPAIR</h3>
+                    <p className="text-xs mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/services/tyres-and-puncture" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
+                      Learn More
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
             
             {/* Navigation arrows */}

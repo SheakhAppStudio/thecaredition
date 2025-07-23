@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
 
 
-    const videosCollection = dbConnect(collections.videos);
+    const videosCollection = await dbConnect(collections.videos);
 
 
     // Build query

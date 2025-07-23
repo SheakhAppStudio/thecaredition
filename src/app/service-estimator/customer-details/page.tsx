@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { VehicleDetails } from '@/services/vehicleApi';
 import axios from 'axios';
 import { useRouter } from "next/navigation";
+import { set } from "react-hook-form";
 
 
 interface Service {
@@ -137,7 +138,9 @@ export default function CustomerDetails() {
           serviceIds: selectedServiceIds,
           otherService,
           totalPrice,
-          status: 'New Request'
+          status: 'New Request',
+          isOnline : 'online',
+          confirmedPrice: totalPrice
         });
         if(res?.data?.insertedId){
             localStorage.removeItem('selectedVehicle');
@@ -145,7 +148,9 @@ export default function CustomerDetails() {
         localStorage.removeItem('otherService');
         localStorage.removeItem('totalPrice');
             toast.success("booking successfully completed")
-            router.push("/")
+            setTimeout(() => {
+              router.push('/bookings/new');
+            }, 1500);
         }
     } catch (error) {
       console.error('Submission error:', error);
@@ -226,13 +231,13 @@ export default function CustomerDetails() {
               </div>
               
               {/* Selected Services */}
-              <div className="mb-6 bg-gray-800 p-4 rounded">
+           <div className="mb-6 bg-gray-800 p-4 rounded">
                 <h3 className="text-lg font-semibold mb-2 text-orange-500">Selected Services</h3>
                 {servicesLoading ? (
                   <div className="flex justify-center">
                     <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-orange-500"></div>
                   </div>
-                ) : services.length > 0 ? (
+                ) : services.length > 0 || otherService.trim() ? (
                   <ul className="list-disc pl-5">
                     {services.map(service => (
                       <li key={service._id}>
@@ -240,7 +245,7 @@ export default function CustomerDetails() {
                       </li>
                     ))}
                     {otherService && <li>{otherService}</li>}
-                    <li className="font-bold mt-2">Total: £{totalPrice.toFixed(2)}</li>
+                  {services.length > 0  &&  <li className="font-bold mt-2">Total: £{totalPrice.toFixed(2)}</li> }
                   </ul>
                 ) : (
                   <p className="text-red-500">No services selected</p>

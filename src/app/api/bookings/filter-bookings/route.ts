@@ -32,8 +32,8 @@ export async function GET(req: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
 
-    const bookingsCollection = dbConnect(collections.bookings);
-    const servicesCollection = dbConnect<services>(collections.services);
+    const bookingsCollection = await dbConnect(collections.bookings);
+    const servicesCollection = await dbConnect<services>(collections.services);
 
     // Build query
     const query: any = {};
@@ -73,7 +73,9 @@ export async function GET(req: NextRequest) {
           "serviceIds": 1,
           "totalPrice": 1,
           "status": 1,
-          "createdAt": 1
+          "createdAt": 1,
+          "otherService": 1,
+          "confirmedPrice": 1,
         }
       }
     ]).toArray();
@@ -87,7 +89,7 @@ export async function GET(req: NextRequest) {
           // Get vehicle data
           const cleanReg = booking?.vehicle?.replace(/\s+/g, '').toUpperCase().toString();
           const vehicleData = await getVehicleByRegistration(cleanReg);
-
+console.log(vehicleData, "vehicleData");
           // Get services data
           let services : services[] = [];
           if (booking.serviceIds && booking.serviceIds.length > 0) {
@@ -119,7 +121,7 @@ export async function GET(req: NextRequest) {
         }
       })
     );
-
+// console.log(enhancedBookings, "enhancedBookings");
     return NextResponse.json({
       data: enhancedBookings,
       pagination: {

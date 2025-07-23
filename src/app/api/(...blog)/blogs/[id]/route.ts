@@ -19,7 +19,7 @@ interface Admission extends Document {
 
 
 // Connect collections with types
-const blogsCollection = dbConnect<Admission>(collections.blogs);
+const blogsCollection = await dbConnect<Admission>(collections.blogs);
 
 
 // GET — fetch admission by ID with related data
@@ -79,6 +79,9 @@ export async function PATCH(req: NextRequest) {
           title: update.title, // "name"
           content: update.content, // "fathersOrHusbandName" mapped to "fatherName"
           imageUrl: update.imageUrl, // "maritalStatus" mapped to "marital"
+          metaTitle: update.metaTitle, // "maritalStatus" mapped to "marital"
+          metaDescription: update.metaDescription, // "maritalStatus" mapped to "marital"
+          metaImageUrl: update.metaImageUrl, // "maritalStatus" mapped to "marital"
 
       }
     };

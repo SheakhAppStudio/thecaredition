@@ -262,7 +262,7 @@ export default function ServiceEstimator() {
                   </button>
                   <button
                     onClick={handleConfirmVehicle}
-                    className="py-4 px-6 bg-orange hover:bg-orange-dark text-white font-bold text-lg rounded-lg transition duration-300 ease-in-out shadow-lg transform hover:scale-105 flex-1"
+                    className="py-4 px-6 bg-gradient-to-r from-orange to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg rounded-lg transition duration-300 ease-in-out shadow-lg transform hover:scale-105 flex-1"
                   >
                     Confirm & Continue
                   </button>

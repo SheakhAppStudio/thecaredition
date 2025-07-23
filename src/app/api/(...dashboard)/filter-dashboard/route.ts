@@ -1,8 +1,9 @@
 // app/api/bookings/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { collections, dbConnect } from "@/lib/dbConnect";
 import { getVehicleByRegistration } from "@/services/vehicleApi";
 import { ObjectId } from "mongodb";
+import { authorizationCheck } from "@/lib/authorization";
 interface services extends Document {
   _id: ObjectId;
   name?: string;
@@ -10,10 +11,22 @@ interface services extends Document {
   basePrice: string;
 
 }
-export async function GET() {
+export async function GET(req : NextRequest) {
+    const referer = req.headers.get('referer') || '';
+  const refererPath = new URL(referer).pathname;
+  
+  // Pass referer path to authorization check
+  const authResult = await authorizationCheck(refererPath);
+  
+  if (!authResult.success) {
+    return NextResponse.json(
+      { error: authResult.error },
+      { status: authResult.status }
+    );
+  }
   try {
     const bookingsCollection = await dbConnect(collections.bookings);
-const servicesCollection = dbConnect<services>(collections.services);
+const servicesCollection =await dbConnect<services>(collections.services);
     // Get counts for different statuses
     const totalNewRequest = await bookingsCollection.countDocuments({ status: "New Request" });
     const totalCompleted = await bookingsCollection.countDocuments({ status: "Completed" });

@@ -16,7 +16,7 @@ interface User extends Document {
   oldPasswords : string[]
 }
 // Connect collections
-const usersCollection = dbConnect<User>(collections.users);
+const usersCollection = await dbConnect<User>(collections.users);
 
 
 

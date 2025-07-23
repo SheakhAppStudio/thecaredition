@@ -19,7 +19,7 @@ interface services extends Document {
 
 
 // Connect collections with types
-const servicesCollection = dbConnect<services>(collections.services);
+const servicesCollection = await dbConnect<services>(collections.services);
 
 
 // GET — fetch services by ID with related data

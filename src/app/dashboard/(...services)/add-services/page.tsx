@@ -41,14 +41,14 @@ const ServiceForm = () => {
   };
 
   return (
-    <main className="min-h-screen py-8">
+    <main className="min-h-screen">
       <Toaster />
       <form 
         onSubmit={handleSubmit(handleFormSubmit)} 
-        className="bg-black rounded-xl shadow-2xl p-8 max-w-4xl mx-auto border border-orange-500/20"
+        className="bg-white rounded-xl shadow-2xl  p-4 md:p-6 border border-orange-500/20"
       >
         <div className="flex items-center justify-between mb-8 border-b border-orange-500/30 pb-4">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent">
             Create New Service
           </h2>
           <div className="h-1 flex-1 bg-gradient-to-r from-orange-500/10 via-orange-500/40 to-orange-500/10 mx-4"></div>
@@ -61,7 +61,7 @@ const ServiceForm = () => {
         
         {/* Service Title Field */}
         <div className="mb-8">
-          <label htmlFor="name" className="block text-sm font-medium text-orange-300 mb-3">
+          <label htmlFor="name" className="block text-sm font-medium text-black mb-3">
             Service Name *
           </label>
           <input
@@ -74,7 +74,7 @@ const ServiceForm = () => {
                 message: 'Name must be at least 3 characters'
               }
             })}
-            className="w-full px-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+            className="w-full px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
             placeholder="Enter service name"
           />
           {errors.name && (
@@ -89,7 +89,7 @@ const ServiceForm = () => {
 
         {/* Service Description Field */}
         <div className="mb-8">
-          <label htmlFor="description" className="block text-sm font-medium text-orange-300 mb-3">
+          <label htmlFor="description" className="block text-sm font-medium text-black mb-3">
             Service Description *
           </label>
           <textarea
@@ -102,7 +102,7 @@ const ServiceForm = () => {
                 message: 'Description must be at least 10 characters'
               }
             })}
-            className="w-full px-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+            className="w-full px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
             placeholder="Enter service description"
           />
           {errors.description && (
@@ -117,7 +117,7 @@ const ServiceForm = () => {
 
         {/* Base Price Field */}
         <div className="mb-8">
-          <label htmlFor="basePrice" className="block text-sm font-medium text-orange-300 mb-3">
+          <label htmlFor="basePrice" className="block text-sm font-medium text-black mb-3">
             Base Price *
           </label>
           <div className="relative">
@@ -134,7 +134,7 @@ const ServiceForm = () => {
                   message: 'Price must be greater than 0'
                 }
               })}
-              className="w-full pl-8 pr-5 py-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-white placeholder-gray-500 transition-all duration-200"
+              className="w-full pl-8 pr-5  px-5 py-3 bg-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-black placeholder-gray-500 transition-all duration-200"
               placeholder="0.00"
             />
           </div>
@@ -148,11 +148,11 @@ const ServiceForm = () => {
           )}
         </div>
 
-        <div className="flex justify-end gap-4 pt-6 border-t border-gray-800">
+        <div className="flex justify-end gap-4 ">
           <button
             type="button"
             onClick={() => reset()}
-            className="px-6 py-3 border border-gray-700 rounded-lg text-orange-300 hover:bg-gray-800/50 hover:border-orange-400/30 transition-all duration-200 flex items-center"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg border  border-red-600  text-red-600 hover:text-white hover:bg-gradient-to-r  hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
@@ -162,7 +162,7 @@ const ServiceForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-8 py-3 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-lg hover:from-orange-700 hover:to-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-black transition-all duration-200 shadow-lg hover:shadow-orange-500/20 flex items-center disabled:opacity-70"
+            className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg text-white bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-sm transition-all duration-200 ease-in-out hover:shadow focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             {isSubmitting ? (
               <>

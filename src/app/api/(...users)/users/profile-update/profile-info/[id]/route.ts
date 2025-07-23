@@ -15,7 +15,7 @@ interface User extends Document {
   password?: string;
 }
 
-const usersCollection = dbConnect<User>(collections.users);
+const usersCollection = await dbConnect<User>(collections.users);
 
 export async function PATCH(req: NextRequest) {
   const referer = req.headers.get('referer') || '';
