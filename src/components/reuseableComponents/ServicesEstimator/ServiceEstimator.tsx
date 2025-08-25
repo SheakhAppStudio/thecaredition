@@ -103,11 +103,7 @@ export default function ServiceEstimatorComponent() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Header with background image */}
-
-
-      {/* Main content */}
+  
       <div className="max-w-5xl mx-auto px-4">
         <div className="bg-black bg-opacity-80 backdrop-blur-sm border border-gray-800 rounded-xl shadow-2xl -mt-20 relative z-10 mb-20 overflow-hidden">
           {/* Progress indicator */}
@@ -253,6 +249,6 @@ export default function ServiceEstimatorComponent() {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 }

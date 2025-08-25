@@ -1,154 +1,183 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import GoogleReviews from '@/components/GoogleReviews';
-import VehicleLookupExact from '@/components/VehicleLookupExact';
+import Image from "next/image";
+import Link from "next/link";
 
 export default function DiagnosticsPage() {
-
   return (
     <main className="min-h-screen bg-black text-white">
       {/* Header section - empty space */}
       <div className="h-16 bg-black"></div>
-      
+
       {/* Main content */}
-      <div className="max-w-5xl mx-auto px-4 relative z-10 mb-10 mt-10">
-        <div className="bg-black bg-opacity-80 backdrop-blur-sm border border-gray-800 rounded-xl shadow-2xl p-8 mb-10">
-          <div className="text-center mb-8">
-            <span className="text-orange-500 text-sm font-medium uppercase tracking-wider">SPECIALIST MECHANICAL WORK</span>
-            <h1 className="text-4xl md:text-5xl font-bold my-4 uppercase italic">
-              DIAGNOSTICS
-            </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto text-gray-300">
-              State-of-the-art diagnostic services for all vehicle makes and models
-            </p>
+      <div className="max-w-7xl mx-auto py-20">
+        <div className="">
+          <div className="bg-black ">
+            <div className=" mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold my-4 italic">
+                Car Diagnostics
+              </h1>
+              <p className="text-lg md:text-xl text-gray-300">
+                Decoding Your Car: The What, Why, and How
+              </p>
+            </div>
           </div>
+        </div>
+        
+        <div className="w-full h-full">
+          <Image
+            src="/images/car-diognistics-cambridge.jpg"
+            alt="Car Service"
+            width={600}
+            height={400}
+            className="w-full h-[50vh] object-cover"
+            priority
+          />
+        </div>
+        
+        <div className="space-y-5">
+          <p className="text-orange-400">
+            Listen to what your car is telling you
+          </p>
+          
+          <p className="">
+            Navigating the intricacies of car diagnostics can be a daunting task, especially for beginners who are not well-versed
+            in the world of automotive technology. In the UK, where efficient and reliable transportation is essential, understanding
+            how to address errors and problems is crucial. This comprehensive guide aims to demystify car diagnostics, providing
+            beginners with a detailed roadmap to identify, understand, and resolve common issues that may arise.
+          </p>
+          
+          <p className="">
+            Are you experiencing issues which you can't diagnose?
+          </p>
+          
+          <p className="text-orange-400">
+            Diognose your car today with
+          </p>
+          
+          <p className="text-orange-400">
+            The Car Edition for as little as £59.99
+          </p>
+          
+          <p className="">
+            At The Car Edition, we take the guesswork out of vehicle diagnostics with our cutting-edge technology, designed to
+            pinpoint issues quickly and accurately.
+          </p>
+          
+          <p className="">
+            Whether it's decoding complex OBD-II error codes, interpreting dashboard warning lights, or uncovering hidden
+            problems beneath the surface, our advanced systems give you clear, reliable answers. By combining industry-leading
+            diagnostic tools with expert knowledge, we help you understand exactly what's going on with your vehicle, saving you
+            time, money, and unnecessary stress.
+          </p>
+          
+          <p className="">
+            With us, you can rest easy knowing your car is in capable hands and that we'll get you back on the road with
+            confidence.
+          </p>
+
+          <div className="flex gap-3 mt-6">
+            <Link
+              href="/service-estimator"
+              className="bg-[#ff0000] hover:bg-[#cc0000] text-white px-4 py-2 text-sm font-medium transition-colors duration-200 text-center"
+            >
+              Book Now
+            </Link>
+            <button className="border border-white hover:border-[#ff0000] text-white hover:text-[#ff0000] px-4 py-2 text-sm font-medium transition-colors duration-200">
+              Chat With Us
+            </button>
+          </div>
+        </div>
+        
+        <section className="bg-black text-white mt-10">
+          <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 p-8">
+            {/* Left Side - Contact Info */}
+            <div className="w-full h-full">
+              <Image
+                src="/images/car-diognistics-cambridge.jpg"
+                alt="Car Service"
+                width={600}
+                height={400}
+                className="w-full h-auto object-cover"
+                priority
+              />
+            </div>
+
+            {/* Right Side - Contact Form */}
+            <div>
+              <h2 className="text-2xl font-semibold mb-6">
+                Send Us a Message
+              </h2>
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="w-full bg-gray-800 text-white p-3 rounded"
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  className="w-full bg-gray-800 text-white p-3 rounded"
+                />
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  className="w-full bg-gray-800 text-white p-3 rounded"
+                />
+                <textarea
+                  placeholder="Your Message"
+                  rows={5}
+                  className="w-full bg-gray-800 text-white p-3 rounded"
+                ></textarea>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="privacy"
+                    className="accent-red-600"
+                  />
+                  <label htmlFor="privacy" className="text-sm">
+                    I accept the privacy policy
+                  </label>
+                </div>
+                <button
+                  type="submit"
+                  className="bg-[#ff0000] hover:bg-[#cc0000] px-6 py-2 rounded text-white"
+                >
+                  Send Message
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+        
+        <div className="space-y-5 mt-10">
+          <p>Understanding the On-Board Diagnostics (OBD) System: The On-Board Diagnostics (OBD) system is the gateway to your car's health. Learn how to
+locate and interpret the OBD port in your vehicle. We'll delve into the importance of OBD in monitoring various systems and identifying potential
+problems.</p>
+          
+          <p>OBD-II and Its Significance: In the UK, most cars manufactured after 2001 are equipped with the OBD-II system. Explore the significance of OBD-II, its
+standardised codes, and how it simplifies the diagnostic process for both professionals and DIY enthusiasts.</p>
+          
+          <p>Common Warning Signs and Error Codes: Decoding dashboard warning lights is essential. Get acquainted with the meaning behind common
+dashboard warning lights, unraveling the mystery behind each signal and what action needs to be taken. Navigate through the alphabet soup of
+OBD-II trouble codes, providing a comprehensive dictionary of common codes.</p>
+          
+          <p>DIY Car Diagnostics: Equip yourself with the fundamental tools needed for basic car diagnostics. From OBD-II scanners to multimeters, learn which
+tools are essential for beginners and how to use them effectively. Follow a step-by-step guide on how to conduct basic car diagnostics, guiding you
+through the process of identifying potential issues with your vehicle.</p>
+          
+          <p>Seeking Professional Help: Understand the limitations of DIY diagnostics and learn when it's time to seek professional help. Explore tips for selecting a
+reliable and skilled mechanic in the UK, discussing scenarios where a certified mechanic's expertise becomes invaluable.</p>
+          
+          <p>Preventative Maintenance and Long-Term Care: Learn how regular maintenance can prevent potential issues and keep your vehicle in optimal
+condition. This section will empower beginners to take a proactive approach to vehicle maintenance, from proper storage practices to addressing
+issues promptly.</p>
+          
+          <p>With this comprehensive guide, we aim to empower UK drivers with the knowledge and tools to navigate the world of car diagnostics confidently.
+Whether you're decoding warning lights or conducting your first OBD-II scan, understanding the basics of car diagnostics lays the foundation for a
+smoother and more reliable driving experience in the UK.</p>
         </div>
       </div>
-
-      {/* Stats Section */}
-      <section className="py-10 bg-black border-t border-b border-gray-800">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">£89</p>
-              <p className="text-sm text-gray-400">Starting price for full diagnostic service</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">5★ Rated</p>
-              <p className="text-sm text-gray-400">Highly rated diagnostic services</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">1000+</p>
-              <p className="text-sm text-gray-400">Diagnostic checks performed annually</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">Latest Equipment</p>
-              <p className="text-sm text-gray-400">Advanced diagnostic tools for accurate results</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Google Reviews Section */}
-      <GoogleReviews darkMode={true} limit={3} />
-      
-      {/* Vehicle Lookup Section */}
-      <section className="py-10 bg-black">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-orange-500 italic uppercase">Book Your Diagnostic Check Today</h2>
-            <p className="text-gray-300 mt-2">Enter your registration to check your vehicle details and get a personalized quote</p>
-          </div>
-          <VehicleLookupExact />
-        </div>
-      </section>
-
-      {/* Information Section */}
-      <section className="py-10 bg-black">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="bg-gray-900 bg-opacity-50 p-8 rounded-lg border border-gray-800">
-            <h2 className="text-2xl font-bold mb-6 text-white">Our Diagnostic Services</h2>
-            <p className="mb-4 text-gray-300">Our comprehensive diagnostic service uses the latest technology to identify problems with your vehicle's systems. Here's what our diagnostic service includes:</p>
-            
-            <h3 className="text-xl font-semibold mt-6 mb-2 text-orange-500">Engine Diagnostics:</h3>
-            <p className="mb-4 text-gray-300">We can identify issues with your engine management system, emissions, fuel system, and more using specialized diagnostic equipment. Our advanced scanners can read manufacturer-specific codes that generic tools miss.</p>
-            
-            <h3 className="text-xl font-semibold mt-6 mb-2 text-orange-500">Electrical System Testing:</h3>
-            <p className="mb-4 text-gray-300">Our technicians can diagnose problems with your vehicle's electrical systems, including battery, alternator, and starter motor issues. We use specialized equipment to test voltage drops, parasitic draws, and circuit integrity.</p>
-            
-            <h3 className="text-xl font-semibold mt-6 mb-2 text-orange-500">ABS & Traction Control:</h3>
-            <p className="mb-4 text-gray-300">We can identify faults in your anti-lock braking system and traction control systems to ensure your vehicle remains safe to drive. Our diagnostic tools can access these safety-critical systems and pinpoint exactly which component is failing.</p>
-            
-            <h3 className="text-xl font-semibold mt-6 mb-2 text-orange-500">Sensor Testing:</h3>
-            <p className="mb-4 text-gray-300">Modern vehicles rely on numerous sensors to function properly. We test all sensors to ensure they're providing accurate data to your vehicle's computer systems. This includes oxygen sensors, mass airflow sensors, crankshaft position sensors, and many more.</p>
-            
-            <h3 className="text-xl font-semibold mt-6 mb-2 text-orange-500">Comprehensive Report:</h3>
-            <p className="mb-4 text-gray-300">After our diagnostic check, we provide you with a detailed report explaining any issues found and our recommended solutions, allowing you to make informed decisions about repairs. We'll explain everything in plain English and prioritize repairs based on safety and urgency.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="py-10 bg-black border-t border-gray-800">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold text-white">Frequently Asked Questions about Car Diagnostics</h2>
-            <button className="text-orange-500 hover:underline">Expand all</button>
-          </div>
-          
-          <div className="space-y-4">
-            <details className="bg-gray-900 p-4 rounded-lg border border-gray-800">
-              <summary className="font-semibold cursor-pointer text-white">What exactly is a car diagnostic check?</summary>
-              <div className="mt-4">
-                <p className="text-gray-300">A car diagnostic check involves connecting a specialized computer tool to your vehicle's onboard computer system. This tool can read information from the various sensors and modules throughout your vehicle, identifying error codes and performance issues that might not be immediately apparent. It's like giving your car a thorough health check-up.</p>
-              </div>
-            </details>
-            
-            <details className="bg-gray-900 p-4 rounded-lg border border-gray-800">
-              <summary className="font-semibold cursor-pointer text-white">How long does a diagnostic check take?</summary>
-              <div className="mt-4">
-                <p className="text-gray-300">A basic diagnostic scan can be completed in as little as 30 minutes. However, if we need to perform more in-depth testing or if multiple systems need to be checked, it may take 1-2 hours. Our technicians will always keep you informed about the expected timeframe for your specific situation.</p>
-              </div>
-            </details>
-            
-            <details className="bg-gray-900 p-4 rounded-lg border border-gray-800">
-              <summary className="font-semibold cursor-pointer text-white">When should I get a diagnostic check?</summary>
-              <div className="mt-4">
-                <p className="text-gray-300">You should consider getting a diagnostic check if your check engine light is on, you notice unusual noises or performance issues, before purchasing a used car, or as part of regular maintenance (annually is recommended). Early diagnosis can prevent small issues from becoming major problems.</p>
-              </div>
-            </details>
-            
-            <details className="bg-gray-900 p-4 rounded-lg border border-gray-800">
-              <summary className="font-semibold cursor-pointer text-white">Can diagnostics fix my car?</summary>
-              <div className="mt-4">
-                <p className="text-gray-300">The diagnostic process itself doesn't fix your car—it identifies what's wrong. Think of it like a medical diagnosis: the doctor needs to determine what's wrong before prescribing treatment. Once we've identified the issue through diagnostics, we can then recommend and perform the necessary repairs to fix the problem.</p>
-              </div>
-            </details>
-            
-            <details className="bg-gray-900 p-4 rounded-lg border border-gray-800">
-              <summary className="font-semibold cursor-pointer text-white">Is a diagnostic check worth the money?</summary>
-              <div className="mt-4">
-                <p className="text-gray-300">Absolutely. A diagnostic check is a cost-effective way to identify problems early, potentially saving you from expensive repairs down the line. It also eliminates guesswork in repairs, ensuring that you're only paying for the work your car actually needs, rather than replacing parts unnecessarily through trial and error.</p>
-              </div>
-            </details>
-          </div>
-        </div>
-      </section>
-      
-      {/* Footer CTA */}
-      <section className="py-10 bg-gradient-to-b from-black to-gray-900">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Ready for a professional diagnostic check?</h2>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">Our expert technicians are ready to help identify and solve your vehicle issues. Get a personalized quote today.</p>
-          <div className="flex justify-center">
-            <a href="/service-estimator" className="bg-orange-500 hover:bg-orange-600 text-white px-10 py-4 rounded-lg font-bold text-xl transition-colors duration-300 shadow-lg transform hover:scale-105">
-              Get a Quote
-            </a>
-          </div>
-          <p className="mt-6 text-gray-400">Or call us directly: <a href="tel:01480700700" className="text-orange-400 hover:text-orange-300">01480 700 700</a></p>
-        </div>
-      </section>
     </main>
   );
 }

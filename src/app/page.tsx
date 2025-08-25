@@ -909,9 +909,9 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
                   <div className="absolute bottom-0 left-0 p-6 text-white">
-                    <h3 className="text-base font-semibold mb-2">ENGINE REBUILDS</h3>
-                    <p className="text-xs mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
-                    <Link href="/services/engine-rebuilds" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
+                    <h3 className="text-base font-semibold mb-2">MECHANICAL REPAIRS</h3>
+                    <p className="text-xs mb-4">Our mechanical repair service at The Car Edition in Huntingdon is like a makeover for your car.</p>
+                    <Link href="/services/mechanical-repair" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
                       Learn More
                       <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
@@ -955,9 +955,9 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-80"></div>
                   <div className="absolute bottom-0 left-0 p-6 text-white">
-                    <h3 className="text-base font-semibold mb-2">TRANSMISSION</h3>
-                    <p className="text-xs mb-4">Expert transmission repair and maintenance to keep your vehicle shifting smoothly and reliably.</p>
-                    <Link href="/services/transmission" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
+                    <h3 className="text-base font-semibold mb-2">BRAKES AND PADS</h3>
+                    <p className="text-xs mb-4">Expert brake and pad replacement services to ensure your safety on the road.</p>
+                    <Link href="/services/brakes-and-pads" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
                       Learn More
                       <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
@@ -1004,7 +1004,7 @@ export default function Home() {
                   <div className="absolute bottom-0 left-0 p-6 text-white">
                     <h3 className="text-base font-semibold mb-2">TIMING CHAINS</h3>
                     <p className="text-xs mb-4">Our engine rebuild service at The Car Edition in Huntingdon is like a makeover for your car.</p>
-                    <Link href="/service-estimator" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
+                    <Link href="/services/timing-chains" className="text-xs font-semibold tracking-wider uppercase flex items-center text-white hover:text-[#f56e13] transition-colors">
                       Learn More
                       <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
