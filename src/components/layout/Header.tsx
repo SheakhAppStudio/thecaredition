@@ -103,13 +103,13 @@ export default function Header() {
   }
 
   const navItems = [
-    { href: "/services", text: "services" },
-    { href: "/shop", text: "shop" },
-    { href: "/service-estimator", text: "service estimator" },
-    { href: "/videos", text: "youtube & media", isYoutube: true },
-    { href: "/blogs", text: "blog & articles" },
-    { href: "/about-us", text: "work for us" },
-    { href: "/contact-us", text: "contact us" },
+    { href: "/services", text: "Services" },
+    { href: "/shop", text: "Shop" },
+    { href: "/service-estimator", text: "Service Estimator" },
+    { href: "/videos", text: "YouTube & Media", isYoutube: true },
+    { href: "/blogs", text: "Blog & Articles" },
+    { href: "/about-us", text: "Work for Us" },
+    { href: "/contact-us", text: "Contact Us" },
   ];
 
   return (

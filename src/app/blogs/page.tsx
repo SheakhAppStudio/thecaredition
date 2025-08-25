@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useRouter } from 'next/navigation';
 
 interface BlogPost {
   _id: string;
@@ -27,7 +28,7 @@ export default function BlogPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedBlog, setSelectedBlog] = useState<BlogPost | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -170,7 +171,9 @@ export default function BlogPage() {
                 />
                 
                 <button
-                  onClick={() => openBlogDialog(blog)}
+                  onClick={() => {
+                    router.push(`/blogs/${blog._id}`);
+                  }}
                   className="inline-flex items-center gap-2 text-white hover:text-red-500 text-sm font-medium transition-colors duration-300"
                 >
                   Read Article

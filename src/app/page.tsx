@@ -641,18 +641,18 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
             {/* Service 1 */}
-            <div className="text-center">
-              <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
+            <Link href={"/popular-services/servicing-and-maintenance"} className="text-center ">
+              <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto ">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Servicing & Maintenance</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Service, Oil Change, Filters</p>
-            </div>
+            </Link>
             
             {/* Service 2 */}
-            <div className="text-center">
+            <Link href={"/popular-services/in-car-entertainment"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 4h-4l-3-3H8L5 4H1v2h18V4zm-3 15H8c-1.65 0-3-1.35-3-3V9h14v7c0 1.65-1.35 3-3 3z" />
@@ -660,10 +660,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Engine & Mechanical Repair</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Clutch, Gearbox, Suspension</p>
-            </div>
-            
+            </Link>
+
             {/* Service 3 */}
-            <div className="text-center">
+            <Link href={"/popular-services/diagnostics"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
@@ -672,10 +672,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Engine Rebuilds</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Full engine rebuilds</p>
-            </div>
+            </Link>
             
             {/* Service 4 */}
-            <div className="text-center">
+            <Link href={"/popular-services/customisation-and-upgrades"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -683,10 +683,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Tyres & Puncture Repair</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Tyre replacement</p>
-            </div>
+            </Link>
             
             {/* Service 5 */}
-            <div className="text-center">
+            <Link href={"/popular-services/servicing-and-maintenance"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -694,10 +694,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Brakes</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Brakes, Discs & Pads</p>
-            </div>
+            </Link>
             
             {/* Service 6 */}
-            <div className="text-center">
+            <Link href={"/popular-services/in-car-entertainment"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -706,10 +706,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">In Car Entertainment</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Dash Cam, Star Lights, Audio</p>
-            </div>
+            </Link>
             
             {/* Service 7 */}
-            <div className="text-center">
+            <Link href={"/popular-services/interior-repair"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -717,10 +717,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Interior Repair</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Upholstery Repair</p>
-            </div>
+            </Link>
             
             {/* Service 8 */}
-            <div className="text-center">
+            <Link href={"/popular-services/air-conditioning"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -728,10 +728,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Air Conditioning</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Re-gas & diagnose</p>
-            </div>
+            </Link>
             
             {/* Service 9 */}
-            <div className="text-center">
+            <Link href={"/popular-services/diagnostics"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
@@ -739,10 +739,10 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Diagnostics</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Problem/symptoms</p>
-            </div>
+            </Link>
             
             {/* Service 10 */}
-            <div className="text-center">
+            <Link href={"/popular-services/customisation-upgrades"} className="text-center">
               <div className="mb-4 w-16 h-16 bg-black text-white rounded-full flex items-center justify-center mx-auto">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -750,7 +750,7 @@ export default function Home() {
               </div>
               <h3 className="text-base font-bold mb-1 text-white italic font-poppins">Customisation & Upgrades</h3>
               <p className="text-[#f56e13] text-xs italic font-poppins">Turbo, Remap, Exhausts</p>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

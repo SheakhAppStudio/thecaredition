@@ -1,16 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+
 import { getVehicleByRegistration, isValidUKRegistration, VehicleDetails } from '@/services/vehicleApi';
 
-// Define CSS variables to match the website theme
-const styles = {
-  orange: 'rgb(234, 88, 12)', // text-orange
-  orangeDark: 'rgb(194, 65, 12)', // hover:bg-orange-dark
-};
 
-export default function ServiceEstimator() {
+export default function ServiceEstimatorComponent() {
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaPlay, FaYoutube } from 'react-icons/fa';
 import moment from 'moment';
-import { Link } from 'lucide-react';
+
 import ServiceEstimator from '@/app/service-estimator/page';
 const TypeAndPuncture = () => {
 

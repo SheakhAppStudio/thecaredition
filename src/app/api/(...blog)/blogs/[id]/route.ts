@@ -27,12 +27,8 @@ export async function GET(req: NextRequest) {
 
   try {
     const id = req.nextUrl.pathname.split("/").pop();
-
-  
-  
-
+console.log(`Fetching blog with ID: ${id}`);
   const video = await blogsCollection.findOne({ _id: new ObjectId(id) });
-
 
     return NextResponse.json(video, { status: 200 });
 
